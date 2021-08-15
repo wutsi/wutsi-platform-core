@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.platform.core.tracing.DeviceIdProvider
 import com.wutsi.platform.core.tracing.TracingContext
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -15,13 +16,15 @@ import javax.servlet.http.HttpServletRequest
 internal class SpringTracingContextTest {
     private lateinit var request: HttpServletRequest
     private lateinit var tc: TracingContext
+    private lateinit var deviceIdProvider: DeviceIdProvider
     private lateinit var context: ApplicationContext
 
     @BeforeEach
     fun setUp() {
         request = mock()
         context = mock()
-        tc = SpringTracingContext(context)
+        deviceIdProvider = mock()
+        tc = SpringTracingContext(context, deviceIdProvider)
     }
 
     @Test
@@ -79,10 +82,10 @@ internal class SpringTracingContextTest {
     }
 
     @Test
-    fun `return device-id from header`() {
+    fun `return device-id from deviceIdProvider`() {
         doReturn(request).whenever(context).getBean(HttpServletRequest::class.java)
-        doReturn("from-header").whenever(request).getHeader(TracingContext.HEADER_DEVICE_ID)
-        assertEquals("from-header", tc.deviceId())
+        doReturn("device-id").whenever(deviceIdProvider).get(request)
+        assertEquals("device-id", tc.deviceId())
     }
 
     @Test
@@ -92,8 +95,9 @@ internal class SpringTracingContextTest {
     }
 
     @Test
-    fun `return NONE as device-id when not available in request header`() {
+    fun `return NONE as device-id when device id not avaialble`() {
         doReturn(request).whenever(context).getBean(HttpServletRequest::class.java)
+        doReturn(null).whenever(deviceIdProvider).get(request)
         assertEquals(TracingContext.NONE, tc.deviceId())
     }
 }

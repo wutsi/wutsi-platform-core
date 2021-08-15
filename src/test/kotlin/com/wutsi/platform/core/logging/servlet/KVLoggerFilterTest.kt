@@ -1,10 +1,11 @@
-package com.wutsi.platform.core.logging
+package com.wutsi.platform.core.logging.servlet
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.platform.core.logging.KVLogger
 import com.wutsi.platform.core.tracing.TracingContext
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

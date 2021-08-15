@@ -2,8 +2,8 @@ package com.wutsi.platform.core.logging.spring
 
 import com.wutsi.platform.core.logging.DefaultKVLogger
 import com.wutsi.platform.core.logging.KVLogger
-import com.wutsi.platform.core.logging.KVLoggerFilter
 import com.wutsi.platform.core.logging.NullKVLogger
+import com.wutsi.platform.core.logging.servlet.KVLoggerFilter
 import com.wutsi.platform.core.tracing.TracingContext
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean

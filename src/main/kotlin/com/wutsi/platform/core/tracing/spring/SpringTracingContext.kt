@@ -1,5 +1,6 @@
 package com.wutsi.platform.core.tracing.spring
 
+import com.wutsi.platform.core.tracing.DeviceIdProvider
 import com.wutsi.platform.core.tracing.TracingContext
 import org.springframework.context.ApplicationContext
 import java.util.UUID
@@ -7,7 +8,8 @@ import javax.servlet.http.HttpServletRequest
 import kotlin.concurrent.getOrSet
 
 open class SpringTracingContext(
-    private val context: ApplicationContext
+    private val context: ApplicationContext,
+    private val deviceIdProvider: DeviceIdProvider
 ) : TracingContext {
     private val defaultRequestId: ThreadLocal<String> = ThreadLocal()
 
@@ -22,7 +24,7 @@ open class SpringTracingContext(
     }
 
     override fun clientId() = getHttpServletRequest()?.getHeader(TracingContext.HEADER_CLIENT_ID) ?: TracingContext.NONE
-    override fun deviceId() = getHttpServletRequest()?.getHeader(TracingContext.HEADER_DEVICE_ID) ?: TracingContext.NONE
+    override fun deviceId() = getHttpServletRequest()?.let { deviceIdProvider.get(it) } ?: TracingContext.NONE
 
     private fun getHttpServletRequest(): HttpServletRequest? {
         try {

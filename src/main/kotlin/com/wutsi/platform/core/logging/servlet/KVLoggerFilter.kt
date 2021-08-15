@@ -1,5 +1,6 @@
-package com.wutsi.platform.core.logging
+package com.wutsi.platform.core.logging.servlet
 
+import com.wutsi.platform.core.logging.KVLogger
 import com.wutsi.platform.core.tracing.TracingContext
 import java.io.IOException
 import javax.servlet.Filter
