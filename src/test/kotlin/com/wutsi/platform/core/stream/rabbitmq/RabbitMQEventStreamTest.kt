@@ -66,7 +66,7 @@ internal class RabbitMQEventStreamTest {
 
     @Test
     fun `message enqueued are pushed to the queue`() {
-        val stream = RabbitMQEventStream("foo", channel, handler, maxRetries = 11, queueTtlSeconds = 111)
+        val stream = RabbitMQEventStream("foo", channel, handler, dlqMaxRetries = 11, queueTtlSeconds = 111)
         stream.enqueue("foo", "bar")
 
         val json = argumentCaptor<ByteArray>()
@@ -88,7 +88,7 @@ internal class RabbitMQEventStreamTest {
 
     @Test
     fun `message published are pushed to the topic`() {
-        val stream = RabbitMQEventStream("foo", channel, handler, maxRetries = 11, queueTtlSeconds = 111)
+        val stream = RabbitMQEventStream("foo", channel, handler, dlqMaxRetries = 11, queueTtlSeconds = 111)
         stream.publish("foo", "bar")
 
         val json = argumentCaptor<ByteArray>()
