@@ -30,7 +30,7 @@ open class StreamConfigurationRabbitMQ(
     @Value("\${wutsi.platform.stream.subscriptions:}") subscriptions: Array<String>,
     @Value("\${wutsi.platform.stream.rabbitmq.url}") private val url: String,
     @Value("\${wutsi.platform.stream.rabbitmq.thread-pool-size:8}") private val threadPoolSize: Int,
-    @Value("\${wutsi.platform.stream.rabbitmq.max-retries:3}") private val maxRetries: Int,
+    @Value("\${wutsi.platform.stream.rabbitmq.dlq.max-retries:10}") private val dlqMaxRetries: Int,
     @Value("\${wutsi.platform.stream.rabbitmq.queue-ttl-seconds:86400}") private val queueTtlSeconds: Long
 ) : AbstractStreamConfiguration(subscriptions) {
     @Bean
@@ -54,7 +54,7 @@ open class StreamConfigurationRabbitMQ(
         name = name,
         channel = channel(),
         queueTtlSeconds = queueTtlSeconds,
-        maxRetries = maxRetries,
+        dlqMaxRetries = dlqMaxRetries,
         handler = object : EventHandler {
             override fun onEvent(event: Event) {
                 eventPublisher.publishEvent(event)
@@ -66,7 +66,7 @@ open class StreamConfigurationRabbitMQ(
     open fun rabbitMQHealthIndicator(): HealthIndicator =
         RabbitMQHealthIndicator(channel())
 
-    @Scheduled(cron = "\${wutsi.rabbitmq.replay-cron:0 */15 * * * *}")
+    @Scheduled(cron = "\${wutsi.platform.stream.rabbitmq.dlq.replay-cron:0 */15 * * * *}")
     public fun replayDlq() {
         (eventStream() as RabbitMQEventStream).replayDlq()
     }

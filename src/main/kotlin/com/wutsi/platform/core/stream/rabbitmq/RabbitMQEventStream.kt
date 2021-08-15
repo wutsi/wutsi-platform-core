@@ -21,7 +21,7 @@ class RabbitMQEventStream(
     private val handler: EventHandler,
     private val consumerSetupDelaySeconds: Long = 180,
     private val queueTtlSeconds: Long = 6 * 60 * 60, /* Queue TTL: 6 hours */
-    private val maxRetries: Int = 10
+    private val dlqMaxRetries: Int = 10
 ) : EventStream {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(RabbitMQEventStream::class.java)
@@ -135,7 +135,7 @@ class RabbitMQEventStream(
 
             // Too many retries?
             val retries = response.props.headers["x-retries"] as Int
-            if (retries >= maxRetries) {
+            if (retries >= dlqMaxRetries) {
                 LOGGER.info("Too many retries - ${response.envelope.deliveryTag}")
                 channel.basicReject(response.envelope.deliveryTag, false) // Reject + Drop
             } else {
@@ -154,7 +154,7 @@ class RabbitMQEventStream(
     private fun properties(retries: Int = 0) = AMQP.BasicProperties().builder()
         .headers(
             mapOf(
-                "x-max-retries" to maxRetries,
+                "x-max-retries" to dlqMaxRetries,
                 "x-retries" to retries
             )
         )

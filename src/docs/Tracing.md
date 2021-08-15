@@ -1,8 +1,6 @@
 # Tracing
 - [TracingContext](https://github.com/wutsi/wutsi-platform-core/blob/master/src/main/kotlin/com/wutsi/platform/core/tracing/TracingContext.kt) is an interface that expose the tracing information
 - [DeviceIdProvider](https://github.com/wutsi/wutsi-platform-core/blob/master/src/main/kotlin/com/wutsi/platform/core/tracing/DeviceIdProvider.kt) is used for getting/setting the user's device identifier.
-  - [DeviceIdProviderCookie](https://github.com/wutsi/wutsi-platform-core/blob/master/src/main/kotlin/com/wutsi/platform/core/tracing/servlet/DeviceIdProviderCookie.kt) is used for getting/setting the user's device identifier from the cookies.
-  - [DeviceIdProviderCookie](https://github.com/wutsi/wutsi-platform-core/blob/master/src/main/kotlin/com/wutsi/platform/core/tracing/servlet/DeviceIdProviderHeader.kt) is used for getting/setting the user's device identifier from the request headers.
 - [DeviceIdFilter](https://github.com/wutsi/wutsi-platform-core/blob/master/src/main/kotlin/com/wutsi/platform/core/tracing/servlet/DeviceIdFilter.kt) is a servlet filter that ensure that each HTTP request is assigned with a unique device identifier.
 - [FeignTracingRequestInterceptor](https://github.com/wutsi/wutsi-platform-core/blob/master/src/main/kotlin/com/wutsi/platform/core/tracing/FeignTracingRequestInterceptor.kt) is an [OpenFeign](https://github.com/OpenFeign/feign) interceptor that add into the headers of each HTTP request:
   - `X-Trace-ID`: Identifier of all the requests associated to a given interaction.
@@ -10,7 +8,7 @@
   - `X-Client-ID`: Identifier of the client that initiates the interaction.
 
 
-## Configuration
+## Spring Configuration
 | Property | Default Value | Description |
 |----------|---------------|-------------|
 | wutsi.platform.tracing.client-id |  | **REQUIRED** - Value of the client ID associated with this application |
