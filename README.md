@@ -9,6 +9,6 @@
 - [Error Handling](src/docs/Error.md)
 - [Caching](src/docs/Caching.md)
 - [Logging](src/docs/Logging.md)
-- [File Storage](src/docs/Storage.md)
+- [Storage](src/docs/Storage.md)
 - [Event Streaming](src/docs/Stream.md)
 - [Tracing](src/docs/Tracing.md)

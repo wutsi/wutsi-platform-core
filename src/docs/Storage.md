@@ -1,10 +1,15 @@
 # Storage
+This module is used for storing files. It provided the following implementation:
+- `local`: implementation to store files to the application local file system
+- `aws`: implementation to store files to AWS S3.
+
+## Main Classes
 - [StorageService](https://github.com/wutsi/wutsi-platform-core/blob/master/src/main/kotlin/com/wutsi/platform/core/storage/StorageService.kt) is an interface for storing/retrieving files.
 
-## Spring Configuration
+## Configuration
 | Property | Default Value | Description |
 |----------|---------------|-------------|
-| wutsi.platform.storage.type | | Type of storage implementation: `local` or `aws` |
+| wutsi.platform.storage.type | local | Type of storage implementation: `local` or `aws` |
 
 ### Local Storage Configuration
 These are the additional configurations when `wutsi.platform.storage.type=local`

@@ -12,7 +12,8 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @ConditionalOnProperty(
     value = ["wutsi.platform.storage.type"],
-    havingValue = "local"
+    havingValue = "local",
+    matchIfMissing = true
 )
 open class StorageConfigurationLocal(
     @Value("\${server.port}") private val port: Int,

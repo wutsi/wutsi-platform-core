@@ -1,10 +1,13 @@
-# Error
+# Stream
+This module provides support for event streaming.
+
+## Main Classes
 - [EventStream](https://github.com/wutsi/wutsi-core/blob/master/src/main/kotlin/com/wutsi/stream/EventStream.kt): for publishing events
 
 ## Spring Configuration
 | Property | Default Value | Description |
 |----------|---------------|-------------|
-| wutsi.platform.stream.type | | Type of implementation: `local` or `rabbitmq` |
+| wutsi.platform.stream.type | none | Type of implementation: `none` or local` or `rabbitmq` |
 
 ### Local Stream Configuration
 These are the additional configurations when `wutsi.platform.stream.type=local`

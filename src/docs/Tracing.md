@@ -1,4 +1,6 @@
 # Tracing
+
+## Main Classes
 - [TracingContext](https://github.com/wutsi/wutsi-platform-core/blob/master/src/main/kotlin/com/wutsi/platform/core/tracing/TracingContext.kt) is an interface that expose the tracing information
 - [DeviceIdProvider](https://github.com/wutsi/wutsi-platform-core/blob/master/src/main/kotlin/com/wutsi/platform/core/tracing/DeviceIdProvider.kt) is used for getting/setting the user's device identifier.
 - [DeviceIdFilter](https://github.com/wutsi/wutsi-platform-core/blob/master/src/main/kotlin/com/wutsi/platform/core/tracing/servlet/DeviceIdFilter.kt) is a servlet filter that ensure that each HTTP request is assigned with a unique device identifier.

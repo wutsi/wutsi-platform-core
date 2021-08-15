@@ -1,5 +1,8 @@
 # Error
-- [ErrorResponse](https://github.com/wutsi/wutsi-core/blob/master/src/main/kotlin/com/wutsi/core/error/BadRequestException.kt): common response to return for all errors
+This module provides functionalities for handling rest exceptions
+
+## Main Classes
+- [ErrorResponse](https://github.com/wutsi/wutsi-core/blob/master/src/main/kotlin/com/wutsi/core/error/BadRequestException.kt): common response returned for all errors
 - [RestControllerErrorHandler](https://github.com/wutsi/wutsi-core/blob/master/src/main/kotlin/com/wutsi/core/spring/RestControllerErrorHandler.kt): Error handler for all rest endpoints
 - HTTP Rest exceptions
   - [BadRequestException](https://github.com/wutsi/wutsi-core/blob/master/src/main/kotlin/com/wutsi/core/error/exception/BadRequestException.kt) for HTTP 400 errors

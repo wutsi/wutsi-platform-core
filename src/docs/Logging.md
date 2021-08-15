@@ -1,4 +1,7 @@
 # Logging
+This module helps logging in a key/value pair format.
+
+## Main Classes
 - [KVLogger](https://github.com/wutsi/wutsi-platform-core/blob/master/src/main/kotlin/com/wutsi/platform/core/logging/KVLogger.kt)
 is an interface for outputing logs in the format key/value pair.
 - [KVLoggerFilter](https://github.com/wutsi/wutsi-platform-core/blob/master/src/main/kotlin/com/wutsi/platform/core/logging/servlet/KVLoggerFilter.kt)

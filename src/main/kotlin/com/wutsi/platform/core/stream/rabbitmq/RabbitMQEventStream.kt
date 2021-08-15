@@ -15,6 +15,9 @@ import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
 
+/**
+ * Implementation of {@link com.wutsi.platform.core.stream.Stream} based on RabbitMQ
+ */
 class RabbitMQEventStream(
     private val name: String,
     private val channel: Channel,

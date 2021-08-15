@@ -16,7 +16,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 
 /**
- * Implementation of {@link com.wutsi.stream.Stream} that uses file system as storage for events
+ * Implementation of {@link com.wutsi.platform.core.stream.Stream} that uses file system as storage for events
  */
 class LocalEventStream(
     private val name: String,
