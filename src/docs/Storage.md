@@ -4,7 +4,7 @@
 ## Spring Configuration
 | Property | Default Value | Description |
 |----------|---------------|-------------|
-| wutsi.platform.storage.type | local | Type of storage implementation: `local` or `aws` |
+| wutsi.platform.storage.type | | Type of storage implementation: `local` or `aws` |
 
 ### Local Storage Configuration
 These are the additional configurations when `wutsi.platform.storage.type=local`

@@ -4,15 +4,15 @@
 ## Spring Configuration
 | Property | Default Value | Description |
 |----------|---------------|-------------|
-| wutsi.platform.stream.type | local | Type of implementation: `local` or `rabbitmq` |
-| wutsi.platform.stream.name | | **REQUIRED** - Name of the stream |
-| wutsi.platform.stream.subscriptions | | String array of the streams that pushes event to this stream |
+| wutsi.platform.stream.type | | Type of implementation: `local` or `rabbitmq` |
 
 ### Local Stream Configuration
 These are the additional configurations when `wutsi.platform.stream.type=local`
 
 | Property | Default Value | Description |
 |----------|---------------|-------------|
+| wutsi.platform.stream.name | | **REQUIRED** - Name of the stream |
+| wutsi.platform.stream.subscriptions | | String array of the streams that pushes event to this stream |
 | wutsi.platform.stream.local.directory | ${user.home}/wutsi/stream | Directory where events are stored |
 
 ### RabbitMQ Configuration
@@ -20,6 +20,8 @@ These are the additional configurations when `wutsi.platform.stream.type=rabbitm
 
 | Property | Default Value | Description |
 |----------|---------------|-------------|
+| wutsi.platform.stream.name | | **REQUIRED** - Name of the stream |
+| wutsi.platform.stream.subscriptions | | String array of the streams that pushes event to this stream |
 | wutsi.platform.stream.rabbitmq.url |  | **REQUIRED** - URL RabbitMQ server |
 | wutsi.platform.stream.rabbitmq.thread-pool-size | 8 | RabbitMQ consumer threadpool size |
 | wutsi.platform.stream.rabbitmq.thread-pool-size | 8 | RabbitMQ consumer threadpool size |
