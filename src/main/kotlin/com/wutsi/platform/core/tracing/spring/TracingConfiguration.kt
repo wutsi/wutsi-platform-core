@@ -16,8 +16,8 @@ import org.springframework.context.annotation.Configuration
 open class TracingConfiguration(
     @Autowired private val context: ApplicationContext,
     @Value("\${wutsi.platform.tracing.client-id}") private val clientId: String,
-    @Value("\${wutsi.platform.tracing.device-id.provider-type:header}") private val deviceIdProviderType: String,
-    @Value("\${wutsi.platform.tracing.device-id.cookie.name:_w_did}") private val cookieName: String
+    @Value("\${wutsi.platform.tracing.device-id-provider:header}") private val deviceIdProviderType: String,
+    @Value("\${wutsi.platform.tracing.device-id-provider.cookie.name:_w_did}") private val cookieName: String
 ) {
     @Bean
     open fun tracingContext(): TracingContext =

@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.0.10] - 2021-08-16
+### Changed
+- Change the configuration for device-id-provider
+- Update documentation
+
 ## [0.0.9] - 2021-08-16
 ### Changed
 - Add all open feign dependencies
