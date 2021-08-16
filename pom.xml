@@ -14,7 +14,7 @@
     <jacoco.threshold.class>0.86</jacoco.threshold.class>
 
     <amqp-client.version>5.13.0</amqp-client.version>
-    <aws.version>1.12.47</aws.version>
+    <aws.version>1.12.48</aws.version>
     <feign.version>11.6</feign.version>
     <jackson.version>2.12.4</jackson.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
