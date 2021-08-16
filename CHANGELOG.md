@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.6] - 2021-08-16
+### Changed
+- Update dependencies
+
 ## [0.0.4] - 2021-08-15
 ### Added
 - Add `caching` with memcached and local implementation
