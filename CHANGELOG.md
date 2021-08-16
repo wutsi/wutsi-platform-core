@@ -1,8 +1,8 @@
 # Change Log
 
-## [0.0.6] - 2021-08-16
+## [0.0.9] - 2021-08-16
 ### Changed
-- Add all open feign dependecies
+- Add all open feign dependencies
 
 ## [0.0.6] - 2021-08-16
 ### Changed
