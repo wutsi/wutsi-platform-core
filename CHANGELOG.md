@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.0.10] - 2021-08-16
+## [0.0.12] - 2021-08-16
 ### Added
 - The class URN for creating and parsing URN strings
 ### Changed
