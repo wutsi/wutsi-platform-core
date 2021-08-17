@@ -309,7 +309,6 @@ internal class RestControllerErrorHandlerTest {
         verify(logger).add("error_parameter_name", response.body.error.parameter?.name)
         verify(logger).add("error_parameter_type", response.body.error.parameter?.type)
         verify(logger).add("error_parameter_value", response.body.error.parameter?.value)
-        verify(logger).add("exception", ex.javaClass.name)
-        verify(logger).add("exception_message", ex.message)
+        verify(logger).log(ex)
     }
 }

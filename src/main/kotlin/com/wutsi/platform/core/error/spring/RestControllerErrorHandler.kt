@@ -172,8 +172,7 @@ class RestControllerErrorHandler(
         logger.add("error_parameter_value", error.parameter?.value)
         logger.add("error_parameter_type", error.parameter?.type)
 
-        logger.add("exception", e.javaClass.name)
-        logger.add("exception_message", e.message)
+        logger.log(e)
     }
 
     private fun status(e: WutsiException): HttpStatus {

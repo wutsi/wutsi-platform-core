@@ -1,6 +1,12 @@
 # Change Log
 
 ## [0.0.10] - 2021-08-16
+### Added
+- The class URN for creating and parsing URN strings
+### Changed
+- RestControllerErrorHandler logs stack trace
+
+## [0.0.10] - 2021-08-16
 ### Changed
 - Change the configuration for device-id-provider
 - Update documentation
