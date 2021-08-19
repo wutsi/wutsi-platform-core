@@ -10,20 +10,21 @@ import java.security.spec.X509EncodedKeySpec
 import java.util.Base64
 import java.util.Collections
 
-class WutsiKeyProvider(private val securityApi: WutsiSecurityApi) : KeyProvider {
+class WutsiKeyProvider(
+    private val securityApi: WutsiSecurityApi,
+    private val cache: MutableMap<String, Key> = Collections.synchronizedMap(mutableMapOf<String, Key>())
+) : KeyProvider {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(WutsiKeyProvider::class.java)
     }
 
-    private val keys = Collections.synchronizedMap(mutableMapOf<String, PublicKey>())
-
     override fun getKey(keyId: String): Key {
-        var key = keys[keyId]
+        var key = cache[keyId]
         if (key != null)
             return key
 
         key = loadKeyFromServer(keyId)
-        keys[keyId] = key
+        cache[keyId] = key
         return key
     }
 
@@ -34,10 +35,7 @@ class WutsiKeyProvider(private val securityApi: WutsiSecurityApi) : KeyProvider 
             val byteKey: ByteArray = Base64.getDecoder().decode(key.content.toByteArray())
             val x509publicKey = X509EncodedKeySpec(byteKey)
             val kf = KeyFactory.getInstance(key.algorithm)
-            val publicKey: PublicKey = kf.generatePublic(x509publicKey)
-
-            keys[keyId] = publicKey
-            return publicKey
+            return kf.generatePublic(x509publicKey)
         } else {
             throw IllegalStateException("Algorithm not supported: ${key.algorithm}")
         }
