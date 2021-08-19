@@ -2,6 +2,8 @@ package com.wutsi.platform.core
 
 import com.wutsi.platform.core.error.spring.ErrorConfiguration
 import com.wutsi.platform.core.logging.spring.LoggingConfiguration
+import com.wutsi.platform.core.security.spring.SecurityConfiguration
+import com.wutsi.platform.core.security.spring.WutsiSecurityAPIConfiguration
 import com.wutsi.platform.core.storage.spring.StorageConfigurationAws
 import com.wutsi.platform.core.storage.spring.StorageConfigurationLocal
 import com.wutsi.platform.core.stream.spring.StreamConfigurationLocal
@@ -15,11 +17,13 @@ import org.springframework.context.annotation.Import
     value = [
         ErrorConfiguration::class,
         LoggingConfiguration::class,
+        SecurityConfiguration::class,
         StreamConfigurationLocal::class,
         StreamConfigurationRabbitMQ::class,
         StorageConfigurationLocal::class,
         StorageConfigurationAws::class,
-        TracingConfiguration::class
+        TracingConfiguration::class,
+        WutsiSecurityAPIConfiguration::class
     ]
 )
 annotation class WutsiApplication

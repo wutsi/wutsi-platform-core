@@ -9,6 +9,7 @@ import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
 import org.slf4j.Logger
 import java.io.IOException
+import java.util.Optional
 import kotlin.test.assertEquals
 
 class DefaultKVLoggerTest {
@@ -29,12 +30,14 @@ class DefaultKVLoggerTest {
         defaultKv.add("valueLong", 1L)
         defaultKv.add("valueInt", 2)
         defaultKv.add("valueDouble", 3.5)
+        defaultKv.add("valueOpt", Optional.of(1))
+        defaultKv.add("valueCollection", listOf(1, 2))
 
         // When
         defaultKv.log()
 
         // Then
-        verify(logger).info("foo=bar john=doe valueDouble=3.5 valueInt=2 valueLong=1")
+        verify(logger).info("foo=bar john=doe valueCollection=\"1 2\" valueDouble=3.5 valueInt=2 valueLong=1 valueOpt=1")
     }
 
     @Test

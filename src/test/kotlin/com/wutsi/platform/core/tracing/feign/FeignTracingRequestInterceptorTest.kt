@@ -1,8 +1,9 @@
-package com.wutsi.platform.core.tracing
+package com.wutsi.platform.core.tracing.feign
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.platform.core.tracing.TracingContext
 import feign.RequestTemplate
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach

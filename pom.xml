@@ -11,13 +11,14 @@
   <name>wutsi-platform-core</name>
 
   <properties>
-    <jacoco.threshold.line>0.86</jacoco.threshold.line>
-    <jacoco.threshold.class>0.86</jacoco.threshold.class>
+    <jacoco.threshold.line>0.85</jacoco.threshold.line>
+    <jacoco.threshold.class>0.85</jacoco.threshold.class>
 
     <amqp-client.version>5.13.0</amqp-client.version>
     <aws.version>1.12.47</aws.version>
     <feign.version>11.6</feign.version>
     <jackson.version>2.12.4</jackson.version>
+    <java-jwt.version>3.18.1</java-jwt.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
     <junit.version>5.7.2</junit.version>
     <klint.version>0.42.1</klint.version>
@@ -31,8 +32,10 @@
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <slf4j.version>1.7.32</slf4j.version>
     <spring.version>5.3.9</spring.version>
+    <spring-security.version>5.5.1</spring-security.version>
     <spring-boot.version>2.5.3</spring-boot.version>
     <xmemcached.version>2.4.7</xmemcached.version>
+    <wutsi-platform-security.version>0.0.1</wutsi-platform-security.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <kotlin.code.style>official</kotlin.code.style>
@@ -54,6 +57,10 @@
     <repository>
       <id>mavenCentral</id>
       <url>https://repo1.maven.org/maven2/</url>
+    </repository>
+    <repository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/wutsi/*</url>
     </repository>
   </repositories>
 
@@ -84,6 +91,11 @@
       <groupId>com.rabbitmq</groupId>
       <artifactId>amqp-client</artifactId>
       <version>${amqp-client.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.wutsi.platform.security</groupId>
+      <artifactId>wutsi-security-sdk-kotlin</artifactId>
+      <version>${wutsi-platform-security.version}</version>
     </dependency>
 
     <dependency>
@@ -177,7 +189,30 @@
       <version>${spring-boot.version}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-core</artifactId>
+      <version>${spring-security.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-config</artifactId>
+      <version>${spring-security.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-web</artifactId>
+      <version>${spring-security.version}</version>
+      <scope>provided</scope>
+    </dependency>
 
+    <dependency>
+      <groupId>com.auth0</groupId>
+      <artifactId>java-jwt</artifactId>
+      <version>${java-jwt.version}</version>
+    </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>

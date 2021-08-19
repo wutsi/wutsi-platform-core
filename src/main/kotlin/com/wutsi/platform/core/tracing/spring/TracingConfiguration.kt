@@ -1,8 +1,8 @@
 package com.wutsi.platform.core.tracing.spring
 
 import com.wutsi.platform.core.tracing.DeviceIdProvider
-import com.wutsi.platform.core.tracing.FeignTracingRequestInterceptor
 import com.wutsi.platform.core.tracing.TracingContext
+import com.wutsi.platform.core.tracing.feign.FeignTracingRequestInterceptor
 import com.wutsi.platform.core.tracing.servlet.DeviceIdFilter
 import com.wutsi.platform.core.tracing.servlet.DeviceIdProviderCookie
 import com.wutsi.platform.core.tracing.servlet.DeviceIdProviderHeader

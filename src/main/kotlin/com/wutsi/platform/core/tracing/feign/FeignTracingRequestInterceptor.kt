@@ -1,5 +1,6 @@
-package com.wutsi.platform.core.tracing
+package com.wutsi.platform.core.tracing.feign
 
+import com.wutsi.platform.core.tracing.TracingContext
 import feign.RequestInterceptor
 import feign.RequestTemplate
 
