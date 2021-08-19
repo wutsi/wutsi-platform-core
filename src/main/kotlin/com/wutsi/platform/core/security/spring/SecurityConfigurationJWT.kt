@@ -8,6 +8,7 @@ import com.wutsi.platform.core.security.spring.wutsi.WutsiKeyProvider
 import com.wutsi.platform.core.security.spring.wutsi.WutsiTokenProvider
 import com.wutsi.platform.security.WutsiSecurityApi
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -21,7 +22,12 @@ import org.springframework.security.web.util.matcher.RequestMatcher
 import javax.servlet.Filter
 
 @Configuration
-open class SecurityConfiguration(
+@ConditionalOnProperty(
+    value = ["wutsi.platform.security.type"],
+    havingValue = "jwt",
+    matchIfMissing = true
+)
+open class SecurityConfigurationJWT(
     private val securityApi: WutsiSecurityApi,
     private val context: ApplicationContext,
     @Value("\${wutsi.platform.security.api-key}") private val apiKey: String,
