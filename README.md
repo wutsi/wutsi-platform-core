@@ -6,9 +6,11 @@
 ![](https://img.shields.io/badge/language-kotlin-blue.svg)
 
 `wutsi-platform-core` is a library that provide core services:
-- [Error Handling](src/docs/Error.md)
+
 - [Caching](src/docs/Caching.md)
-- [Logging](src/docs/Logging.md)
-- [Storage](src/docs/Storage.md)
+- [Error Handling](src/docs/Error.md)
 - [Event Streaming](src/docs/Stream.md)
+- [Logging](src/docs/Logging.md)
+- [Security](src/docs/Security.md)
+- [Storage](src/docs/Storage.md)
 - [Tracing](src/docs/Tracing.md)

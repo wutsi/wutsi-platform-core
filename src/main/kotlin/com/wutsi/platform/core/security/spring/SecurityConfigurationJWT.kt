@@ -7,6 +7,7 @@ import com.wutsi.platform.core.security.spring.jwt.JWTAuthenticationProvider
 import com.wutsi.platform.core.security.spring.wutsi.WutsiKeyProvider
 import com.wutsi.platform.core.security.spring.wutsi.WutsiTokenProvider
 import com.wutsi.platform.security.WutsiSecurityApi
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.ApplicationContext
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
@@ -21,6 +23,7 @@ import org.springframework.security.web.util.matcher.OrRequestMatcher
 import org.springframework.security.web.util.matcher.RequestMatcher
 import javax.servlet.Filter
 
+@EnableWebSecurity
 @Configuration
 @ConditionalOnProperty(
     value = ["wutsi.platform.security.type"],
@@ -33,6 +36,10 @@ open class SecurityConfigurationJWT(
     @Value("\${wutsi.platform.security.api-key}") private val apiKey: String,
     @Value("\${wutsi.platform.security.secured-endpoints}") private val securedEndpoints: Array<String>
 ) : WebSecurityConfigurerAdapter() {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(SecurityConfigurationJWT::class.java)
+    }
+
     private val securedEndpointMatcher: RequestMatcher
 
     init {
@@ -49,6 +56,7 @@ open class SecurityConfigurationJWT(
     }
 
     public override fun configure(http: HttpSecurity) {
+        LOGGER.info("Configuring security")
         if (securedEndpoints.isEmpty()) {
 
             http

@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.16] - 2021-08-20
+### Added
+- Support for securty configuration
+
 ## [0.0.12] - 2021-08-16
 ### Added
 - The class URN for creating and parsing URN strings
