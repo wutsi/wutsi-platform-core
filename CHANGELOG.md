@@ -1,8 +1,9 @@
 # Change Log
 
-## [0.0.19] - 2021-08-20
+## [0.0.20] - 2021-08-20
 ### Added
 - Add `@EnableGlobalMethodSecurity` to `SecurityConfigurationJWT`
+- Add `@EnableCaching` to cahe configuration classes
 
 ## [0.0.18] - 2021-08-20
 ### Added
