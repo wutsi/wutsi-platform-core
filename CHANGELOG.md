@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.0.16] - 2021-08-20
+## [0.0.18] - 2021-08-20
 ### Added
 - Support for securty configuration
 
