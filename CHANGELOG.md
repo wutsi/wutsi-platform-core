@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.22] - 2021-08-21
+### Changed
+- Make `secured-endpoint` configuration optional
+
 ## [0.0.20] - 2021-08-20
 ### Added
 - Add `@EnableGlobalMethodSecurity` to `SecurityConfigurationJWT`
