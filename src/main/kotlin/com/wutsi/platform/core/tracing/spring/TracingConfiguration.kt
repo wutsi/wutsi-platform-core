@@ -8,9 +8,11 @@ import com.wutsi.platform.core.tracing.servlet.DeviceIdProviderCookie
 import com.wutsi.platform.core.tracing.servlet.DeviceIdProviderHeader
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.Ordered
 
 @Configuration
 open class TracingConfiguration(
@@ -35,6 +37,9 @@ open class TracingConfiguration(
             DeviceIdProviderHeader()
 
     @Bean
-    open fun deviceIdFilter(): DeviceIdFilter =
-        DeviceIdFilter(deviceIdProvider())
+    open fun deviceIdFilter(): FilterRegistrationBean<DeviceIdFilter> {
+        val filter = FilterRegistrationBean(DeviceIdFilter(deviceIdProvider()))
+        filter.order = Ordered.LOWEST_PRECEDENCE - 100
+        return filter
+    }
 }

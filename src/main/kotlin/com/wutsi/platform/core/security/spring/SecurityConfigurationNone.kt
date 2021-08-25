@@ -19,7 +19,7 @@ open class SecurityConfigurationNone : WebSecurityConfigurerAdapter() {
     }
 
     public override fun configure(http: HttpSecurity) {
-        LOGGER.info("Configuring security")
+        LOGGER.info("Configuring HttpSecurity")
         http
             .csrf()
             .disable()

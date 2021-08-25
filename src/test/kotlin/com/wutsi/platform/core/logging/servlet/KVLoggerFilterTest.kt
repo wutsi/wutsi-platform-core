@@ -1,11 +1,13 @@
 package com.wutsi.platform.core.logging.servlet
 
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.platform.core.logging.KVLogger
+import com.wutsi.platform.core.tracing.DeviceIdProvider
 import com.wutsi.platform.core.tracing.TracingContext
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -21,7 +23,7 @@ class KVLoggerFilterTest {
     private lateinit var request: HttpServletRequest
     private lateinit var response: HttpServletResponse
     private lateinit var chain: FilterChain
-    private lateinit var tracingContext: TracingContext
+    private lateinit var deviceIdProvider: DeviceIdProvider
 
     private lateinit var filter: KVLoggerFilter
 
@@ -31,16 +33,16 @@ class KVLoggerFilterTest {
         request = mock()
         response = mock()
         chain = mock()
-        tracingContext = mock()
+        deviceIdProvider = mock()
 
-        filter = KVLoggerFilter(kv, tracingContext)
+        filter = KVLoggerFilter(kv, deviceIdProvider)
 
         doReturn("/foo/bar").whenever(request).requestURI
         doReturn(201).whenever(response).status
 
-        doReturn("client-id").whenever(tracingContext).clientId()
-        doReturn("device-id").whenever(tracingContext).deviceId()
-        doReturn("trace-id").whenever(tracingContext).traceId()
+        doReturn("client-id").whenever(request).getHeader(TracingContext.HEADER_CLIENT_ID)
+        doReturn("trace-id").whenever(request).getHeader(TracingContext.HEADER_TRACE_ID)
+        doReturn("device-id").whenever(deviceIdProvider).get(any())
     }
 
     @Test
@@ -95,8 +97,9 @@ class KVLoggerFilterTest {
             verify(kv).add("client_id", "client-id")
             verify(kv).add("device_id", "device-id")
             verify(kv).add("trace_id", "trace-id")
+            verify(kv).setException(e)
 
-            verify(kv).log(e)
+            verify(kv).log()
         }
     }
 }

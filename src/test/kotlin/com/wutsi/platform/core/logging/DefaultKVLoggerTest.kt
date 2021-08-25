@@ -79,9 +79,10 @@ class DefaultKVLoggerTest {
     fun shouldLogException() {
         // Given
         val ex = IOException("error")
+        defaultKv.setException(ex)
 
         // When
-        defaultKv.log(ex)
+        defaultKv.log()
 
         // Then
         val msg = ArgumentCaptor.forClass(String::class.java)

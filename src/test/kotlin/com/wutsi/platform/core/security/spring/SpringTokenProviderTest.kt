@@ -13,18 +13,14 @@ import kotlin.test.assertNull
 
 internal class SpringTokenProviderTest {
     private lateinit var context: ApplicationContext
-    private lateinit var appTokenProvider: TokenProvider
     private lateinit var request: HttpServletRequest
     private lateinit var provider: TokenProvider
 
     @BeforeEach
     fun setUp() {
         context = mock()
-        appTokenProvider = mock()
         request = mock()
-        provider = SpringTokenProvider(context, appTokenProvider)
-
-        doReturn("777").whenever(appTokenProvider).geToken()
+        provider = SpringTokenProvider(context)
     }
 
     @Test
@@ -49,12 +45,5 @@ internal class SpringTokenProviderTest {
         doReturn(null).whenever(request).getHeader("Authorization")
 
         assertNull(provider.geToken())
-    }
-
-    @Test
-    fun `return app JWT when request not available in spring context`() {
-        doReturn(null).whenever(context).getBean(HttpServletRequest::class.java)
-
-        assertEquals("777", provider.geToken())
     }
 }

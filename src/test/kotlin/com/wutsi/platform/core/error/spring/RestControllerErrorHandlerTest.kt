@@ -1,6 +1,5 @@
 package com.wutsi.platform.core.error.spring
 
-import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -21,11 +20,12 @@ import com.wutsi.platform.core.logging.KVLogger
 import com.wutsi.platform.core.tracing.TracingContext
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.context.MessageSource
 import org.springframework.core.MethodParameter
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.validation.BindingResult
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -35,37 +35,61 @@ import org.springframework.web.bind.MissingRequestHeaderException
 import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 import java.util.UUID
+import javax.servlet.http.HttpServletRequest
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 internal class RestControllerErrorHandlerTest {
     private lateinit var handler: RestControllerErrorHandler
     private lateinit var logger: KVLogger
-    private lateinit var messages: MessageSource
-    private lateinit var tracingContext: TracingContext
+    private lateinit var request: HttpServletRequest
     private val traceId = UUID.randomUUID().toString()
-    private val message = "Detail error message"
 
     @BeforeEach
     fun setUp() {
         logger = mock()
 
-        messages = mock()
-        doReturn(message).whenever(messages).getMessage(any(), any(), any())
+        request = mock()
+        doReturn(traceId).whenever(request).getHeader(TracingContext.HEADER_TRACE_ID)
 
-        tracingContext = mock()
-        doReturn(traceId).whenever(tracingContext).traceId()
-
-        handler = RestControllerErrorHandler(messages, logger, tracingContext)
+        handler = RestControllerErrorHandler(logger)
     }
 
     @Test
     fun onException() {
         val ex = RuntimeException("Unexpected error")
-        val response = handler.onException(ex)
+        val response = handler.onException(request, ex)
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.statusCode)
-        assertEquals(RestControllerErrorHandler.ERROR_INTERNAL_ERROR, response.body.error.code)
+        assertEquals(RestControllerErrorHandler.ERROR_INTERNAL, response.body.error.code)
+        assertEquals(traceId, response.body.error.traceId)
+        assertEquals(ex.message, response.body.error.message)
+        assertNull(response.body.error.parameter)
+
+        verifyLogger(response, ex)
+    }
+
+    @Test
+    fun onAccessDeniedException() {
+        val ex = AccessDeniedException("Unexpected error")
+        val response = handler.onAccessDeniedException(request, ex)
+
+        assertEquals(HttpStatus.FORBIDDEN, response.statusCode)
+        assertEquals(RestControllerErrorHandler.ERROR_ACCESS_DENIED, response.body.error.code)
+        assertEquals(traceId, response.body.error.traceId)
+        assertEquals(ex.message, response.body.error.message)
+        assertNull(response.body.error.parameter)
+
+        verifyLogger(response, ex)
+    }
+
+    @Test
+    fun onAuthenticationException() {
+        val ex = BadCredentialsException("Unexpected error")
+        val response = handler.onAuthenticationException(request, ex)
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.statusCode)
+        assertEquals(RestControllerErrorHandler.ERROR_AUTHENTICATION_FAILED, response.body.error.code)
         assertEquals(traceId, response.body.error.traceId)
         assertEquals(ex.message, response.body.error.message)
         assertNull(response.body.error.parameter)
@@ -76,7 +100,7 @@ internal class RestControllerErrorHandlerTest {
     @Test
     fun onHttpRequestMethodNotSupportedException() {
         val ex = HttpRequestMethodNotSupportedException("GET")
-        val response = handler.onHttpRequestMethodNotSupportedException(ex)
+        val response = handler.onHttpRequestMethodNotSupportedException(request, ex)
 
         assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
         assertEquals(RestControllerErrorHandler.ERROR_METHOD_NOT_SUPPORTED, response.body.error.code)
@@ -163,12 +187,11 @@ internal class RestControllerErrorHandlerTest {
 
     private fun testWutsiException(expectedStatus: HttpStatus, ex: WutsiException) {
         val error = ex.error
-        val response = handler.onWutsiException(ex)
+        val response = handler.onWutsiException(request, ex)
 
         assertEquals(expectedStatus, response.statusCode)
         assertEquals(error.code, response.body.error.code)
         assertEquals(traceId, response.body.error.traceId)
-        assertEquals(message, response.body.error.message)
         assertEquals(error.parameter, response.body.error.parameter)
 
         verifyLogger(response, ex)
@@ -178,7 +201,7 @@ internal class RestControllerErrorHandlerTest {
     fun onHttpMessageNotReadableException() {
         val ex = HttpMessageNotReadableException("error")
 
-        val response = handler.onHttpMessageNotReadableException(ex)
+        val response = handler.onHttpMessageNotReadableException(request, ex)
 
         assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
         assertEquals(RestControllerErrorHandler.ERROR_REQUEST_NOT_READABLE, response.body.error.code)
@@ -193,7 +216,7 @@ internal class RestControllerErrorHandlerTest {
     fun onMissingServletRequestParameterException() {
         val ex = MissingServletRequestParameterException("foo", "string")
 
-        val response = handler.onMissingServletRequestParameterException(ex)
+        val response = handler.onMissingServletRequestParameterException(request, ex)
 
         assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
         assertEquals(RestControllerErrorHandler.ERROR_MISSING_PARAMETER, response.body.error.code)
@@ -212,7 +235,7 @@ internal class RestControllerErrorHandlerTest {
 
         val ex = MissingPathVariableException("foo", param)
 
-        val response = handler.onMissingPathVariableException(ex)
+        val response = handler.onMissingPathVariableException(request, ex)
 
         assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
         assertEquals(RestControllerErrorHandler.ERROR_MISSING_PARAMETER, response.body.error.code)
@@ -231,7 +254,7 @@ internal class RestControllerErrorHandlerTest {
 
         val ex = MissingRequestHeaderException("foo", param)
 
-        val response = handler.onMissingRequestHeaderException(ex)
+        val response = handler.onMissingRequestHeaderException(request, ex)
 
         assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
         assertEquals(RestControllerErrorHandler.ERROR_MISSING_PARAMETER, response.body.error.code)
@@ -250,7 +273,7 @@ internal class RestControllerErrorHandlerTest {
 
         val ex = MissingRequestCookieException("foo", param)
 
-        val response = handler.onMissingRequestCookieException(ex)
+        val response = handler.onMissingRequestCookieException(request, ex)
 
         assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
         assertEquals(RestControllerErrorHandler.ERROR_MISSING_PARAMETER, response.body.error.code)
@@ -270,7 +293,7 @@ internal class RestControllerErrorHandlerTest {
 
         val ex = MethodArgumentNotValidException(param, mock<BindingResult>())
 
-        val response = handler.onMethodArgumentNotValidException(ex)
+        val response = handler.onMethodArgumentNotValidException(request, ex)
 
         assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
         assertEquals(RestControllerErrorHandler.ERROR_INVALID_PARAMETER, response.body.error.code)
@@ -289,7 +312,7 @@ internal class RestControllerErrorHandlerTest {
 
         val ex = MethodArgumentTypeMismatchException("bar", Long::class.java, "foo", param, null)
 
-        val response = handler.onMethodArgumentTypeMismatchException(ex)
+        val response = handler.onMethodArgumentTypeMismatchException(request, ex)
 
         assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
         assertEquals(RestControllerErrorHandler.ERROR_INVALID_PARAMETER, response.body.error.code)
@@ -309,6 +332,6 @@ internal class RestControllerErrorHandlerTest {
         verify(logger).add("error_parameter_name", response.body.error.parameter?.name)
         verify(logger).add("error_parameter_type", response.body.error.parameter?.type)
         verify(logger).add("error_parameter_value", response.body.error.parameter?.value)
-        verify(logger).log(ex)
+        verify(logger).setException(ex)
     }
 }

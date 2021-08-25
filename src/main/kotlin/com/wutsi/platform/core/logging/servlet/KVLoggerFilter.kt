@@ -1,7 +1,8 @@
 package com.wutsi.platform.core.logging.servlet
 
 import com.wutsi.platform.core.logging.KVLogger
-import com.wutsi.platform.core.tracing.TracingContext
+import com.wutsi.platform.core.tracing.DeviceIdProvider
+import com.wutsi.platform.core.tracing.servlet.HttpTracingContext
 import java.io.IOException
 import javax.servlet.Filter
 import javax.servlet.FilterChain
@@ -14,8 +15,10 @@ import javax.servlet.http.HttpServletResponse
 
 class KVLoggerFilter(
     private val kv: KVLogger,
-    private val tracingContext: TracingContext
+    private val deviceIdProvider: DeviceIdProvider
 ) : Filter {
+    private val tracingContext = HttpTracingContext()
+
     @Throws(ServletException::class)
     override fun init(filterConfig: FilterConfig) {
         // Empty
@@ -32,7 +35,8 @@ class KVLoggerFilter(
             kv.log()
         } catch (e: Exception) {
             log(startTime, 500, servletRequest as HttpServletRequest, kv)
-            kv.log(e)
+            kv.setException(e)
+            kv.log()
             throw e
         }
     }
@@ -55,9 +59,9 @@ class KVLoggerFilter(
         kv.add("http_status", status.toLong())
         kv.add("http_endpoint", request.requestURI)
         kv.add("http_method", request.method)
-        kv.add("trace_id", tracingContext.traceId())
-        kv.add("client_id", tracingContext.clientId())
-        kv.add("device_id", tracingContext.deviceId())
+        kv.add("trace_id", tracingContext.traceId(request))
+        kv.add("client_id", tracingContext.clientId(request))
+        kv.add("device_id", tracingContext.deviceId(request, deviceIdProvider))
 
         val params = request.parameterMap
         params.keys.forEach { kv.add("http_param_$it", params[it]?.toList()) }

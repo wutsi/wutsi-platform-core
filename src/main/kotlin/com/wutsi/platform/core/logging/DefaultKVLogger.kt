@@ -12,29 +12,30 @@ open class DefaultKVLogger(
 ) : KVLogger {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(DefaultKVLogger::class.java)
-        val EXCEPTION = "exception"
-        val EXCEPTION_MESSAGE = "exception_message"
-        val KVPAIR_SEPARATOR = "="
-        val ITEM_SEPARATOR = " "
-
-        val MAX_LENGTH = 10000
+        const val EXCEPTION = "exception"
+        const val EXCEPTION_MESSAGE = "exception_message"
+        const val KVPAIR_SEPARATOR = "="
+        const val ITEM_SEPARATOR = " "
+        const val MAX_LENGTH = 10000
     }
 
     val data: MutableMap<String, MutableList<String>> = Collections.synchronizedMap(mutableMapOf())
+    private var exception: Throwable? = null
 
     override fun log() {
-        if (data.isEmpty())
+        if (data.isEmpty() && exception == null)
             return
 
-        logger.info(toString())
-        data.clear()
-    }
+        if (exception == null) {
+            logger.info(toString())
+        } else {
+            add(EXCEPTION, exception!!.javaClass.name)
+            add(EXCEPTION_MESSAGE, exception!!.message)
+            logger.error(toString(), exception)
+        }
 
-    override fun log(ex: Throwable) {
-        add(EXCEPTION, ex.javaClass.name)
-        add(EXCEPTION_MESSAGE, ex.message)
-        logger.error(toString(), ex)
         data.clear()
+        exception = null
     }
 
     override fun add(key: String, value: String?) {
@@ -74,6 +75,10 @@ open class DefaultKVLogger(
 
     override fun add(key: String, value: Any?) {
         add(key, value?.toString())
+    }
+
+    override fun setException(ex: Throwable) {
+        exception = ex
     }
 
     override fun toString(): String {

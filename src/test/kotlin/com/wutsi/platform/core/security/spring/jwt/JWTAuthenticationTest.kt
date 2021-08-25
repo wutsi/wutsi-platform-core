@@ -12,7 +12,7 @@ import kotlin.test.assertTrue
 internal class JWTAuthenticationTest {
     @Test
     fun test() {
-        val auth = JWTAuthentication(createAccessToken())
+        val auth = JWTAuthentication.of(createAccessToken())
         auth.setAuthenticated(true)
 
         assertEquals("subject", auth.name)

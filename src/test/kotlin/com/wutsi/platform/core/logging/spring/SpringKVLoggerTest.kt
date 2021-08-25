@@ -53,17 +53,6 @@ internal class SpringKVLoggerTest {
         verify(fallback, never()).log()
     }
 
-    @Test
-    fun `log exception when logger is available in the context`() {
-        doReturn(requestLogger).whenever(context).getBean(DefaultKVLogger::class.java)
-
-        val ex = RuntimeException()
-        logger.log(ex)
-
-        verify(requestLogger).log(ex)
-        verify(fallback, never()).log(ex)
-    }
-
     @ParameterizedTest
     @MethodSource("data")
     fun `add when logger is not available in the context`(key: String, value: Any?) {
@@ -83,17 +72,6 @@ internal class SpringKVLoggerTest {
 
         verify(requestLogger, never()).log()
         verify(fallback).log()
-    }
-
-    @Test
-    fun `log exception when logger is not available in the context`() {
-        doThrow(RuntimeException::class).whenever(context).getBean(DefaultKVLogger::class.java)
-
-        val ex = RuntimeException()
-        logger.log(ex)
-
-        verify(requestLogger, never()).log(ex)
-        verify(fallback).log(ex)
     }
 
     companion object {

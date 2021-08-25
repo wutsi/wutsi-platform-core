@@ -6,9 +6,6 @@ open class NullKVLogger : KVLogger {
     override fun log() {
     }
 
-    override fun log(ex: Throwable) {
-    }
-
     override fun add(key: String, value: String?) {
     }
 
@@ -25,5 +22,8 @@ open class NullKVLogger : KVLogger {
     }
 
     override fun add(key: String, value: Any?) {
+    }
+
+    override fun setException(ex: Throwable) {
     }
 }

@@ -13,8 +13,8 @@ open class SpringKVLogger(
         getLogger().log()
     }
 
-    override fun log(ex: Throwable) {
-        getLogger().log(ex)
+    override fun setException(ex: Throwable) {
+        getLogger().setException(ex)
     }
 
     override fun add(key: String, value: String?) {
