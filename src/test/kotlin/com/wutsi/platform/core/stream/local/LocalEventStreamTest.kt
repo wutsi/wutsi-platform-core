@@ -23,7 +23,7 @@ internal class LocalEventStreamTest {
         root.deleteRecursively()
 
         handler = mock()
-        stream = LocalEventStream(name = "test", root = root, handler = handler)
+        stream = LocalEventStream(name = "keystore/test", root = root, handler = handler)
     }
 
     @Test
@@ -77,7 +77,7 @@ internal class LocalEventStreamTest {
 
         stream.subscribeTo("source")
 
-        source.publish("test", "oups")
+        source.publish("keystore/test", "oups")
         Thread.sleep(15000)
 
         assertEquals(1, source.output.listFiles().size)

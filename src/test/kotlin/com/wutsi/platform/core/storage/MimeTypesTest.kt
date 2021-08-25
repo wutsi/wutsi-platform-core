@@ -25,7 +25,7 @@ internal class MimeTypesTest {
             Arguments.of("test.txt", "text/plain"),
             Arguments.of("test.html", "text/html"),
             Arguments.of("test.pdf", "application/pdf"),
-            Arguments.of("test", "application/octet-stream"),
+            Arguments.of("keystore/test", "application/octet-stream"),
         )
     }
 }

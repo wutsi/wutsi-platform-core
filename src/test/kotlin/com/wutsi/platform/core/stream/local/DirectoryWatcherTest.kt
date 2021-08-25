@@ -56,7 +56,7 @@ internal class DirectoryWatcherTest {
 
     private fun createEvent() = Event(
         id = UUID.randomUUID().toString(),
-        type = "test",
+        type = "keystore/test",
         timestamp = OffsetDateTime.now(),
         payload = "foo"
     )

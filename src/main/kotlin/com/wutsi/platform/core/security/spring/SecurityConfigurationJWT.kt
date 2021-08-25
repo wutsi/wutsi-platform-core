@@ -7,7 +7,6 @@ import com.wutsi.platform.core.security.spring.jwt.JWTAuthenticationProvider
 import com.wutsi.platform.core.security.spring.wutsi.WutsiKeyProvider
 import com.wutsi.platform.security.WutsiSecurityApi
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
@@ -31,8 +30,7 @@ import javax.servlet.Filter
 )
 open class SecurityConfigurationJWT(
     private val securityApi: WutsiSecurityApi,
-    private val context: ApplicationContext,
-    @Value("\${wutsi.platform.security.api-key}") private val apiKey: String
+    private val context: ApplicationContext
 ) : WebSecurityConfigurerAdapter() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(SecurityConfigurationJWT::class.java)
