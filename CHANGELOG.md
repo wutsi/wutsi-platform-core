@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.27] - 2021-08-26
+### Changed
+- Exclude actuator endpoints from security configuration
+
 ## [0.0.26] - 2021-08-26
 ### Changed
 - `JWTAuthentificationFilter` logs in anonymous user when no token available

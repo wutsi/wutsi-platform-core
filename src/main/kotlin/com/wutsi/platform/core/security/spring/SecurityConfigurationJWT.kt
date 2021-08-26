@@ -17,7 +17,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
-import org.springframework.security.web.util.matcher.AnyRequestMatcher
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher
+import org.springframework.security.web.util.matcher.RequestMatcher
 import javax.servlet.Filter
 
 @EnableWebSecurity
@@ -47,7 +49,8 @@ open class SecurityConfigurationJWT(
             )
             .and()
             .authorizeRequests()
-            .anyRequest().authenticated()
+            .requestMatchers(securedEndpoints()).authenticated()
+            .anyRequest().permitAll()
             .and()
             .addFilterBefore(
                 authenticationFilter(),
@@ -69,10 +72,15 @@ open class SecurityConfigurationJWT(
 
     private fun authenticationFilter(): Filter {
         val filter = JWTAuthenticationFilter(
-            requestMatcher = AnyRequestMatcher.INSTANCE,
+            requestMatcher = securedEndpoints(),
             keyProvider = keyProvider()
         )
         filter.setAuthenticationManager(authenticationManagerBean())
         return filter
     }
+
+    private fun securedEndpoints(): RequestMatcher =
+        NegatedRequestMatcher(
+            AntPathRequestMatcher("/actuator/*", "GET") // Actuator endpoints
+        )
 }
