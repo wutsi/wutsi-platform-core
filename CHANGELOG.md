@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.26] - 2021-08-26
+### Changed
+- `JWTAuthentificationFilter` logs in anonymous user when no token available
+
 ## [0.0.22] - 2021-08-21
 ### Changed
 - Make `secured-endpoint` configuration optional

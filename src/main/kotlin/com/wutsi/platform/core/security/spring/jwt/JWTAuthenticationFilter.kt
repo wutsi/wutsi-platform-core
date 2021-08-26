@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.wutsi.platform.core.security.KeyProvider
+import com.wutsi.platform.core.security.spring.AnonymousAuthentication
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.Authentication
@@ -26,15 +27,16 @@ class JWTAuthenticationFilter(
     override fun attemptAuthentication(request: HttpServletRequest, response: HttpServletResponse): Authentication? {
         val jwt = getToken(request)
         LOGGER.debug("Token in request header: $jwt")
-        if (jwt != null) {
+        val auth = if (jwt != null) {
             validate(jwt)
 
-            val auth = JWTAuthentication.of(jwt)
-            LOGGER.debug("Authenticating: $auth")
-            return authenticationManager.authenticate(auth)
+            JWTAuthentication.of(jwt)
         } else {
-            return null
+            AnonymousAuthentication()
         }
+
+        LOGGER.debug("Authenticating: $auth")
+        return authenticationManager.authenticate(auth)
     }
 
     override fun successfulAuthentication(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain, authentication: Authentication) {
