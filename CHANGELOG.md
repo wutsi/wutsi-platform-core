@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.0.28] - 2021-08-28
+## [0.0.29] - 2021-08-28
 ### Changed
 - Exclude OPTION endpoints from security configuration
 
