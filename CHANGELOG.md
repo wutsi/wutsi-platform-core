@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.28] - 2021-08-28
+### Changed
+- Exclude OPTION endpoints from security configuration
+
 ## [0.0.27] - 2021-08-26
 ### Changed
 - Exclude actuator endpoints from security configuration

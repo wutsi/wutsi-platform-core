@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -19,6 +20,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher
+import org.springframework.security.web.util.matcher.OrRequestMatcher
 import org.springframework.security.web.util.matcher.RequestMatcher
 import javax.servlet.Filter
 
@@ -80,7 +82,11 @@ open class SecurityConfigurationJWT(
     }
 
     private fun securedEndpoints(): RequestMatcher =
+
         NegatedRequestMatcher(
-            AntPathRequestMatcher("/actuator/*", "GET") // Actuator endpoints
+            OrRequestMatcher(
+                AntPathRequestMatcher("/actuator/*", HttpMethod.GET.name), // Actuator endpoints
+                AntPathRequestMatcher("/*", HttpMethod.OPTIONS.name) // OPTION
+            )
         )
 }
