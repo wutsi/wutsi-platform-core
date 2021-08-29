@@ -26,7 +26,7 @@ internal class DirectoryWatcherTest {
         event = null
         handler = object : EventHandler {
             override fun onEvent(evt: Event) {
-                System.out.println("onEvent($evt)")
+                println("onEvent($evt)")
                 event = evt
             }
         }

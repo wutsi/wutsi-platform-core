@@ -10,12 +10,8 @@ class SpringTokenProvider(
     override fun geToken(): String? {
         val request = getHttpServletRequest()
         if (request == null) {
-            println(">>> No HttpServletRequest available")
             return null
         } else {
-            request.headerNames?.asIterator()?.forEach {
-                println(">>> HEADER $it" + getHttpServletRequest()?.getHeader(it))
-            }
             val value = request.getHeader("Authorization") ?: return null
             return if (value.startsWith("Bearer ", ignoreCase = true))
                 value.substring(7)

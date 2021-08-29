@@ -29,9 +29,10 @@ class JWTAuthenticationFilter(
         LOGGER.debug("Token in request header: $jwt")
         val auth = if (jwt != null) {
             validate(jwt)
-
+            LOGGER.debug("Logging as $jwt")
             JWTAuthentication.of(jwt)
         } else {
+            LOGGER.debug("Logging as anonymous user")
             AnonymousAuthentication()
         }
 
@@ -50,10 +51,7 @@ class JWTAuthenticationFilter(
             JWT.require(algorithm)
                 .build()
                 .verify(jwt)
-
-            LOGGER.debug("Token is valid")
         } catch (ex: JWTVerificationException) {
-            LOGGER.error("Token is not valid valid", ex)
             throw BadCredentialsException("Invalid token: $jwt")
         }
     }
@@ -65,7 +63,6 @@ class JWTAuthenticationFilter(
             return Algorithm.RSA256(key as RSAPublicKey, null)
         }
 
-        LOGGER.error("Not supported: ${token.algorithm}")
         throw BadCredentialsException("Encryption algorithm not supported: ${token.algorithm}")
     }
 
