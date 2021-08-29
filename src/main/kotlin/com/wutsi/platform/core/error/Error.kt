@@ -6,5 +6,6 @@ data class Error(
     val parameter: Parameter? = null,
     val traceId: String? = null,
     val downstreamCode: String? = null,
-    val downstreamMessage: String? = null
+    val downstreamMessage: String? = null,
+    val data: Map<String, Any>? = null
 )
