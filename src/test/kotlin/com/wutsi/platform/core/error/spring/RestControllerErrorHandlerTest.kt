@@ -124,7 +124,8 @@ internal class RestControllerErrorHandlerTest {
                         name = "id",
                         type = PARAMETER_TYPE_PAYLOAD,
                         value = "1111"
-                    )
+                    ),
+                    data = mapOf("foo" to "bar")
                 )
             )
         )
@@ -187,12 +188,13 @@ internal class RestControllerErrorHandlerTest {
 
     private fun testWutsiException(expectedStatus: HttpStatus, ex: WutsiException) {
         val error = ex.error
-        val response = handler.onWutsiException(request, ex)
+        val response = handler.onException(request, ex)
 
         assertEquals(expectedStatus, response.statusCode)
         assertEquals(error.code, response.body.error.code)
         assertEquals(traceId, response.body.error.traceId)
         assertEquals(error.parameter, response.body.error.parameter)
+        assertEquals(error.data, response.body.error.data)
 
         verifyLogger(response, ex)
     }
@@ -332,6 +334,10 @@ internal class RestControllerErrorHandlerTest {
         verify(logger).add("error_parameter_name", response.body.error.parameter?.name)
         verify(logger).add("error_parameter_type", response.body.error.parameter?.type)
         verify(logger).add("error_parameter_value", response.body.error.parameter?.value)
+
+        response.body.error.data?.forEach {
+            verify(logger).add("error_data_${it.key}", it.value)
+        }
         verify(logger).setException(ex)
     }
 }

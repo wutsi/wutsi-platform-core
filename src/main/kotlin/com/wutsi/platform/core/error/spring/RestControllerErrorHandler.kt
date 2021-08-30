@@ -48,14 +48,18 @@ class RestControllerErrorHandler(
     private val tracingContext = HttpTracingContext()
 
     @ExceptionHandler(Throwable::class)
-    fun onException(request: HttpServletRequest, e: Throwable): ResponseEntity<ErrorResponse> =
-        handleException(
+    fun onException(request: HttpServletRequest, e: Throwable): ResponseEntity<ErrorResponse> {
+        val error = if (e is WutsiException) e.error else null
+        return handleException(
             request,
-            code = ERROR_INTERNAL,
-            status = INTERNAL_SERVER_ERROR,
+            code = error?.code ?: ERROR_INTERNAL,
+            status = status(e),
             e = e,
-            message = e.message
+            parameter = error?.parameter,
+            message = error?.message ?: e.message,
+            data = error?.data
         )
+    }
 
     @ExceptionHandler(AccessDeniedException::class)
     fun onAccessDeniedException(request: HttpServletRequest, e: AccessDeniedException): ResponseEntity<ErrorResponse> =
@@ -85,16 +89,6 @@ class RestControllerErrorHandler(
             status = HttpStatus.NOT_FOUND,
             e = e,
             message = e.message
-        )
-
-    @ExceptionHandler(WutsiException::class)
-    fun onWutsiException(request: HttpServletRequest, e: WutsiException): ResponseEntity<ErrorResponse> =
-        handleException(
-            request,
-            code = e.error.code,
-            status = status(e),
-            e = e,
-            parameter = e.error.parameter
         )
 
     @ExceptionHandler(HttpMessageNotReadableException::class)
@@ -181,14 +175,16 @@ class RestControllerErrorHandler(
         status: HttpStatus,
         e: Throwable,
         parameter: Parameter? = null,
-        message: String? = ""
+        message: String? = null,
+        data: Map<String, Any>? = null
     ): ResponseEntity<ErrorResponse> {
         val response = ErrorResponse(
             error = Error(
                 code = code,
                 traceId = tracingContext.traceId(request),
                 parameter = parameter,
-                message = message
+                message = message,
+                data = data
             )
         )
 
@@ -206,11 +202,14 @@ class RestControllerErrorHandler(
         logger.add("error_parameter_name", error.parameter?.name)
         logger.add("error_parameter_value", error.parameter?.value)
         logger.add("error_parameter_type", error.parameter?.type)
+        error.data?.forEach {
+            logger.add("error_data_${it.key}", it.value)
+        }
 
         logger.setException(e)
     }
 
-    private fun status(e: WutsiException): HttpStatus {
+    private fun status(e: Throwable): HttpStatus {
         val status = e::class.annotations.find { it is ResponseStatus } as ResponseStatus?
         return status?.value ?: INTERNAL_SERVER_ERROR
     }
