@@ -8,7 +8,7 @@ import java.util.Date
 class JWTBuilder(
     private val subject: String,
     private val subjectName: String,
-    private val subjectType: String,
+    private val subjectType: JWTSubjectType,
     private val keyProvider: RSAKeyProvider,
     private val admin: Boolean = false,
     private val ttl: Long = 84600,
@@ -29,7 +29,7 @@ class JWTBuilder(
             .withExpiresAt(Date(System.currentTimeMillis() + ttl))
             .withJWTId(keyProvider.privateKeyId)
             .withSubject(subject)
-            .withClaim(CLAIM_SUBJECT_TYPE, subjectType)
+            .withClaim(CLAIM_SUBJECT_TYPE, subjectType.name)
             .withClaim(CLAIM_SUBJECT_NAME, subjectName)
             .withClaim(CLAIM_SCOPE, scope)
             .withClaim(CLAIM_ADMIN, admin)

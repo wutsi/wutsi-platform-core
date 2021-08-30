@@ -2,6 +2,7 @@ package com.wutsi.platform.core.security.spring.jwt
 
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.wutsi.platform.core.security.WutsiPrincipal
+import com.wutsi.platform.core.security.spring.jwt.JWTSubjectType.JWT_SUBJECT_TYPE_USER
 import com.wutsi.platform.core.test.TestRSAKeyProvider
 import org.junit.jupiter.api.Test
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -24,7 +25,7 @@ internal class JWTAuthenticationTest {
         assertEquals("12345", principal.id)
         assertEquals("Ray Sponsible", principal.name)
         assertTrue(principal.admin)
-        assertEquals("user", principal.type)
+        assertEquals(JWT_SUBJECT_TYPE_USER.name, principal.type)
     }
 
     private fun createAccessToken(): String =
@@ -35,6 +36,6 @@ internal class JWTAuthenticationTest {
             scope = listOf("a", "b"),
             subject = "12345",
             subjectName = "Ray Sponsible",
-            subjectType = "user"
+            subjectType = JWT_SUBJECT_TYPE_USER
         ).build()
 }
