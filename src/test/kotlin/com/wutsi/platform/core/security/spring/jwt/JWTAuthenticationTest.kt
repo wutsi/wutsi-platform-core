@@ -1,11 +1,10 @@
 package com.wutsi.platform.core.security.spring.jwt
 
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
+import com.wutsi.platform.core.security.WutsiPrincipal
+import com.wutsi.platform.core.test.TestRSAKeyProvider
 import org.junit.jupiter.api.Test
 import org.springframework.security.core.authority.SimpleGrantedAuthority
-import java.util.Date
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -15,22 +14,27 @@ internal class JWTAuthenticationTest {
         val auth = JWTAuthentication.of(createAccessToken())
         auth.setAuthenticated(true)
 
-        assertEquals("subject", auth.name)
-        assertEquals(mutableListOf(SimpleGrantedAuthority("read"), SimpleGrantedAuthority("write")), auth.authorities)
+        assertEquals("12345", auth.name)
+        assertEquals(mutableListOf(SimpleGrantedAuthority("a"), SimpleGrantedAuthority("b")), auth.authorities)
         assertTrue(auth.isAuthenticated)
-        assertEquals(auth, auth.principal)
         assertTrue(auth.details is DecodedJWT)
+
+        assertTrue(auth.principal is WutsiPrincipal)
+        val principal = auth.principal as WutsiPrincipal
+        assertEquals("12345", principal.id)
+        assertEquals("Ray Sponsible", principal.name)
+        assertTrue(principal.admin)
+        assertEquals("user", principal.type)
     }
 
-    private fun createAccessToken(): String {
-        val now = System.currentTimeMillis()
-        return JWT.create()
-            .withIssuer("Test")
-            .withIssuedAt(Date(now))
-            .withExpiresAt(Date(now + 100000))
-            .withJWTId("111")
-            .withSubject("subject")
-            .withClaim("scope", listOf("read", "write"))
-            .sign(Algorithm.HMAC256("secret"))
-    }
+    private fun createAccessToken(): String =
+        JWTBuilder(
+            ttl = 100000,
+            admin = true,
+            keyProvider = TestRSAKeyProvider(),
+            scope = listOf("a", "b"),
+            subject = "12345",
+            subjectName = "Ray Sponsible",
+            subjectType = "user"
+        ).build()
 }

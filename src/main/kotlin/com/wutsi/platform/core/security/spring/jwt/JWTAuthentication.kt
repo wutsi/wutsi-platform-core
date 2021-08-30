@@ -2,13 +2,16 @@ package com.wutsi.platform.core.security.spring.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.interfaces.DecodedJWT
+import com.wutsi.platform.core.security.WutsiPrincipal
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import java.security.Principal
 
 class JWTAuthentication(private val decodedJWT: DecodedJWT) : Authentication {
     private var authenticated: Boolean = false
-    private val authorities: MutableCollection<SimpleGrantedAuthority> = decodedJWT.claims["scope"]
+    private val principal: Principal
+    private val authorities: MutableCollection<SimpleGrantedAuthority> = decodedJWT.claims[JWTBuilder.CLAIM_SCOPE]
         ?.asList(String::class.java)
         ?.map { SimpleGrantedAuthority(it) }
         ?.toMutableList()
@@ -17,6 +20,15 @@ class JWTAuthentication(private val decodedJWT: DecodedJWT) : Authentication {
     companion object {
         fun of(jwt: String): JWTAuthentication =
             JWTAuthentication(JWT.decode(jwt))
+    }
+
+    init {
+        principal = WutsiPrincipal(
+            id = decodedJWT.subject,
+            type = decodedJWT.getClaim(JWTBuilder.CLAIM_SUBJECT_TYPE).asString() ?: "",
+            _name = decodedJWT.getClaim(JWTBuilder.CLAIM_SUBJECT_NAME).asString() ?: "",
+            admin = decodedJWT.getClaim(JWTBuilder.CLAIM_ADMIN).asBoolean() ?: false
+        )
     }
 
     override fun getName(): String =
@@ -32,7 +44,7 @@ class JWTAuthentication(private val decodedJWT: DecodedJWT) : Authentication {
         decodedJWT
 
     override fun getPrincipal(): Any =
-        this
+        principal
 
     override fun isAuthenticated(): Boolean =
         authenticated
