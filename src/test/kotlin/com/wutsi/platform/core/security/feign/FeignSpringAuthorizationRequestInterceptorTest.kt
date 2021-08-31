@@ -10,15 +10,15 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-internal class FeignSecurityRequestInterceptorTest {
+internal class FeignSpringAuthorizationRequestInterceptorTest {
     private lateinit var tokenProvider: TokenProvider
     private val request = RequestTemplate()
-    private lateinit var interceptor: FeignSecurityRequestInterceptor
+    private lateinit var interceptor: FeignAuthorizationRequestInterceptor
 
     @BeforeEach
     fun setUp() {
         tokenProvider = mock()
-        interceptor = FeignSecurityRequestInterceptor(tokenProvider)
+        interceptor = FeignAuthorizationRequestInterceptor(tokenProvider)
     }
 
     @Test

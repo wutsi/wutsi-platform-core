@@ -4,7 +4,7 @@ import com.wutsi.platform.core.security.TokenProvider
 import feign.RequestInterceptor
 import feign.RequestTemplate
 
-class FeignSecurityRequestInterceptor(
+class FeignAuthorizationRequestInterceptor(
     private val tokenProvider: TokenProvider
 ) : RequestInterceptor {
     override fun apply(request: RequestTemplate) {
