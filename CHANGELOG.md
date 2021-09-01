@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.37] - 2021-08-28
+### Changed
+- Add WutsiPrincipal
+
 ## [0.0.35] - 2021-08-28
 ### Changed
 - Add JWTBuilder

@@ -53,7 +53,7 @@ open class SecurityConfigurationJWT(
             .authorizeRequests()
             .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .antMatchers("/actuator/**").permitAll()
-            .anyRequest().permitAll()
+            .anyRequest().authenticated()
             .and()
             .addFilterBefore(
                 authenticationFilter(),

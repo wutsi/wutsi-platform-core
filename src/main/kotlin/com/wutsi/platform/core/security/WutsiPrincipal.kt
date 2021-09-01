@@ -10,4 +10,7 @@ class WutsiPrincipal(
 ) : Principal {
     override fun getName(): String =
         _name
+
+    override fun toString(): String =
+        "WutsiPrincipal{id=$id, name=$_name, type=$type, admin=$admin}"
 }
