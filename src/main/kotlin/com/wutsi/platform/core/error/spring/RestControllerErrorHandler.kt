@@ -57,7 +57,8 @@ class RestControllerErrorHandler(
             e = e,
             parameter = error?.parameter,
             message = error?.message ?: e.message,
-            data = error?.data
+            data = error?.data,
+            downstreamCode = error?.downstreamCode
         )
     }
 
@@ -167,7 +168,14 @@ class RestControllerErrorHandler(
         )
 
     private fun handleBadRequest(request: HttpServletRequest, code: String, e: Throwable, parameter: Parameter? = null): ResponseEntity<ErrorResponse> =
-        handleException(request, code, BAD_REQUEST, e, parameter, e.message)
+        handleException(
+            request,
+            code,
+            BAD_REQUEST,
+            e,
+            parameter,
+            e.message
+        )
 
     private fun handleException(
         request: HttpServletRequest,
@@ -176,7 +184,8 @@ class RestControllerErrorHandler(
         e: Throwable,
         parameter: Parameter? = null,
         message: String? = null,
-        data: Map<String, Any>? = null
+        data: Map<String, Any>? = null,
+        downstreamCode: String? = null
     ): ResponseEntity<ErrorResponse> {
         val response = ErrorResponse(
             error = Error(
@@ -184,7 +193,8 @@ class RestControllerErrorHandler(
                 traceId = tracingContext.traceId(request),
                 parameter = parameter,
                 message = message,
-                data = data
+                data = data,
+                downstreamCode = downstreamCode
             )
         )
 
