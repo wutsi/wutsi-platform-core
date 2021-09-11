@@ -11,7 +11,7 @@ class SpringAuthorizationRequestInterceptor(
 ) : ClientHttpRequestInterceptor {
 
     override fun intercept(request: HttpRequest, body: ByteArray, exec: ClientHttpRequestExecution): ClientHttpResponse {
-        val token = tokenProvider.geToken()
+        val token = tokenProvider.getToken()
         request.headers["Authorization"] = listOf("Bearer $token")
 
         return exec.execute(request, body)

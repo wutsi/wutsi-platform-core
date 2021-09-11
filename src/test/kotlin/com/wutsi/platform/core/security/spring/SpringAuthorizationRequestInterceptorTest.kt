@@ -24,7 +24,7 @@ internal class SpringAuthorizationRequestInterceptorTest {
         doReturn(response).whenever(exec).execute(any(), any())
 
         val tokenProvider = mock<TokenProvider>()
-        doReturn("foo").whenever(tokenProvider).geToken()
+        doReturn("foo").whenever(tokenProvider).getToken()
 
         val interceptor = SpringAuthorizationRequestInterceptor(tokenProvider)
 

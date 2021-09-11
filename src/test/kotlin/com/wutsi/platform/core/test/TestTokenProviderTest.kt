@@ -7,6 +7,6 @@ class TestTokenProviderTest {
     @Test
     fun getToken() {
         val provider = TestTokenProvider("foo")
-        assertEquals("foo", provider.geToken())
+        assertEquals("foo", provider.getToken())
     }
 }

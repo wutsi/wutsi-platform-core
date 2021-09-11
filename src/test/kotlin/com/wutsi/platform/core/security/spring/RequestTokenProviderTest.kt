@@ -23,20 +23,20 @@ internal class RequestTokenProviderTest {
     fun `return the JWT from request header`() {
         doReturn("BeaReR 111").whenever(request).getHeader("Authorization")
 
-        assertEquals("111", provider.geToken())
+        assertEquals("111", provider.getToken())
     }
 
     @Test
     fun `return null when request header malformed`() {
         doReturn("-- 111").whenever(request).getHeader("Authorization")
 
-        kotlin.test.assertNull(provider.geToken())
+        kotlin.test.assertNull(provider.getToken())
     }
 
     @Test
     fun `return null when request header not available`() {
         doReturn(null).whenever(request).getHeader("Authorization")
 
-        kotlin.test.assertNull(provider.geToken())
+        kotlin.test.assertNull(provider.getToken())
     }
 }

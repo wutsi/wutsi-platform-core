@@ -13,12 +13,11 @@ class FeignAuthorizationRequestInterceptor(
     }
 
     override fun apply(request: RequestTemplate) {
-        val token = tokenProvider.geToken()
+        val token = tokenProvider.getToken()
         if (token != null) {
-            LOGGER.debug("Adding token into request header: $token")
             request.header("Authorization", "Bearer $token")
         } else {
-            LOGGER.debug("No token available")
+            LOGGER.debug("No token available in the header.")
         }
     }
 }

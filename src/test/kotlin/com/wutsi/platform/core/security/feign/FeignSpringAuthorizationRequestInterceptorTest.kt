@@ -23,7 +23,7 @@ internal class FeignSpringAuthorizationRequestInterceptorTest {
 
     @Test
     fun `set authorization header when JWT available`() {
-        doReturn("111").whenever(tokenProvider).geToken()
+        doReturn("111").whenever(tokenProvider).getToken()
         interceptor.apply(request)
 
         assertTrue(request.headers()["Authorization"]!!.contains("Bearer 111"))
@@ -31,7 +31,7 @@ internal class FeignSpringAuthorizationRequestInterceptorTest {
 
     @Test
     fun `do not set authorization header when JWT not avaialble`() {
-        doReturn(null).whenever(tokenProvider).geToken()
+        doReturn(null).whenever(tokenProvider).getToken()
         interceptor.apply(request)
 
         assertFalse(request.headers().containsKey("Authorization"))

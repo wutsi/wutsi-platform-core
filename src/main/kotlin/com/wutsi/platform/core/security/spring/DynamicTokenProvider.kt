@@ -12,13 +12,13 @@ class DynamicTokenProvider(
         private val LOGGER = LoggerFactory.getLogger(DynamicTokenProvider::class.java)
     }
 
-    override fun geToken(): String? {
+    override fun getToken(): String? {
         val delegate = get()
         if (delegate == null) {
-            LOGGER.debug("No token provider")
+            LOGGER.debug("No TokenProvider available in Application Context")
             return null
         } else {
-            return delegate.geToken()
+            return delegate.getToken()
         }
     }
 

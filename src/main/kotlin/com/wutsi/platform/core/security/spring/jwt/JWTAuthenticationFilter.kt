@@ -25,18 +25,16 @@ class JWTAuthenticationFilter(
     }
 
     override fun attemptAuthentication(request: HttpServletRequest, response: HttpServletResponse): Authentication? {
-        val jwt = getToken(request)
-        LOGGER.debug("Token in request header: $jwt")
-        val auth = if (jwt != null) {
-            validate(jwt)
-            LOGGER.debug("Logging as $jwt")
-            JWTAuthentication.of(jwt)
+        val token = getToken(request)
+        LOGGER.debug("Token in request header: $token")
+        val auth = if (token != null) {
+            validate(token)
+            JWTAuthentication.of(token)
         } else {
-            LOGGER.debug("Logging as anonymous user")
+            LOGGER.debug("No token found in the header")
             AnonymousAuthentication()
         }
 
-        LOGGER.debug("Authenticating: $auth")
         return authenticationManager.authenticate(auth)
     }
 
@@ -52,7 +50,7 @@ class JWTAuthenticationFilter(
                 .build()
                 .verify(jwt)
         } catch (ex: JWTVerificationException) {
-            throw BadCredentialsException("Invalid token: $jwt")
+            throw BadCredentialsException("Invalid token: $jwt", ex)
         }
     }
 
