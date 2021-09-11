@@ -1,11 +1,12 @@
 package com.wutsi.platform.core.logging.spring
 
-import com.wutsi.platform.core.logging.DefaultKVLogger
 import com.wutsi.platform.core.logging.KVLogger
+import com.wutsi.platform.core.logging.RequestKVLogger
 import org.springframework.context.ApplicationContext
+import org.springframework.web.context.request.RequestContextHolder
 import java.util.Optional
 
-open class SpringKVLogger(
+open class DynamicKVLogger(
     private val context: ApplicationContext,
     private val fallback: KVLogger
 ) : KVLogger {
@@ -41,11 +42,9 @@ open class SpringKVLogger(
         getLogger().add(key, value)
     }
 
-    private fun getLogger(): KVLogger {
-        try {
-            return context.getBean(DefaultKVLogger::class.java)
-        } catch (ex: Exception) {
-            return fallback
-        }
-    }
+    private fun getLogger(): KVLogger =
+        if (RequestContextHolder.getRequestAttributes() != null)
+            context.getBean(RequestKVLogger::class.java)
+        else
+            fallback
 }

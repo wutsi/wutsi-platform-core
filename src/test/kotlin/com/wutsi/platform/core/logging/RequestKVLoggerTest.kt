@@ -12,29 +12,29 @@ import java.io.IOException
 import java.util.Optional
 import kotlin.test.assertEquals
 
-class DefaultKVLoggerTest {
+class RequestKVLoggerTest {
     private lateinit var logger: Logger
-    private lateinit var defaultKv: DefaultKVLogger
+    private lateinit var requestKv: RequestKVLogger
 
     @BeforeEach
     fun setUp() {
         logger = mock(Logger::class.java)
-        defaultKv = DefaultKVLogger(logger, LoggerEncoder())
+        requestKv = RequestKVLogger(logger, LoggerEncoder())
     }
 
     @Test
     fun shouldLog() {
         // Given
-        defaultKv.add("foo", "bar")
-        defaultKv.add("john", "doe")
-        defaultKv.add("valueLong", 1L)
-        defaultKv.add("valueInt", 2)
-        defaultKv.add("valueDouble", 3.5)
-        defaultKv.add("valueOpt", Optional.of(1))
-        defaultKv.add("valueCollection", listOf(1, 2))
+        requestKv.add("foo", "bar")
+        requestKv.add("john", "doe")
+        requestKv.add("valueLong", 1L)
+        requestKv.add("valueInt", 2)
+        requestKv.add("valueDouble", 3.5)
+        requestKv.add("valueOpt", Optional.of(1))
+        requestKv.add("valueCollection", listOf(1, 2))
 
         // When
-        defaultKv.log()
+        requestKv.log()
 
         // Then
         verify(logger).info("foo=bar john=doe valueCollection=\"1 2\" valueDouble=3.5 valueInt=2 valueLong=1 valueOpt=1")
@@ -43,7 +43,7 @@ class DefaultKVLoggerTest {
     @Test
     fun shouldNotLogWhenEmpty() {
         // When
-        defaultKv.log()
+        requestKv.log()
 
         // Then
         verify(logger, never()).info(anyString())
@@ -52,11 +52,11 @@ class DefaultKVLoggerTest {
     @Test
     fun shouldLogMultiValue() {
         // Given
-        defaultKv.add("foo", "john")
-        defaultKv.add("foo", "doe")
+        requestKv.add("foo", "john")
+        requestKv.add("foo", "doe")
 
         // When
-        defaultKv.log()
+        requestKv.log()
 
         // Then
         verify(logger).info("foo=\"john doe\"")
@@ -65,11 +65,11 @@ class DefaultKVLoggerTest {
     @Test
     fun shouldLogWithSortedKeys() {
         // Given
-        defaultKv.add("Z", "bar")
-        defaultKv.add("A", "doe")
+        requestKv.add("Z", "bar")
+        requestKv.add("A", "doe")
 
         // When
-        defaultKv.log()
+        requestKv.log()
 
         // Then
         verify(logger).info("A=doe Z=bar")
@@ -79,10 +79,10 @@ class DefaultKVLoggerTest {
     fun shouldLogException() {
         // Given
         val ex = IOException("error")
-        defaultKv.setException(ex)
+        requestKv.setException(ex)
 
         // When
-        defaultKv.log()
+        requestKv.log()
 
         // Then
         val msg = ArgumentCaptor.forClass(String::class.java)
@@ -102,27 +102,27 @@ class DefaultKVLoggerTest {
             longString.append(ch100).append('\n')
         }
 
-        defaultKv.add("foo", "bar")
-        defaultKv.add("john", "smith")
-        defaultKv.add("name", longString.toString())
+        requestKv.add("foo", "bar")
+        requestKv.add("john", "smith")
+        requestKv.add("name", longString.toString())
 
         // When
-        defaultKv.log()
+        requestKv.log()
 
         // Then
         val msg = ArgumentCaptor.forClass(String::class.java)
         verify(logger).info(msg.capture())
-        assertEquals(DefaultKVLogger.MAX_LENGTH, msg.value.length)
+        assertEquals(RequestKVLogger.MAX_LENGTH, msg.value.length)
     }
 
     @Test
     fun shouldNotLogNullValue() {
         // Given
-        defaultKv.add("foo", "bar")
-        defaultKv.add("john", null as String?)
+        requestKv.add("foo", "bar")
+        requestKv.add("john", null as String?)
 
         // When
-        defaultKv.log()
+        requestKv.log()
 
         // Then
         verify(logger).info("foo=bar")

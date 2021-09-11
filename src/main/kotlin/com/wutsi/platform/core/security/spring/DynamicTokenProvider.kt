@@ -1,0 +1,30 @@
+package com.wutsi.platform.core.security.spring
+
+import com.wutsi.platform.core.security.TokenProvider
+import org.slf4j.LoggerFactory
+import org.springframework.context.ApplicationContext
+import org.springframework.web.context.request.RequestContextHolder
+
+class DynamicTokenProvider(
+    private val context: ApplicationContext
+) : TokenProvider {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(DynamicTokenProvider::class.java)
+    }
+
+    override fun geToken(): String? {
+        val delegate = get()
+        if (delegate == null) {
+            LOGGER.debug("No token provider")
+            return null
+        } else {
+            return delegate.geToken()
+        }
+    }
+
+    private fun get(): TokenProvider? =
+        if (RequestContextHolder.getRequestAttributes() != null)
+            context.getBean(RequestTokenProvider::class.java)
+        else
+            null
+}

@@ -11,6 +11,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Scope
+import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
@@ -22,6 +24,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher
 import org.springframework.security.web.util.matcher.OrRequestMatcher
 import javax.servlet.Filter
+import javax.servlet.http.HttpServletRequest
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -71,7 +74,12 @@ open class SecurityConfigurationJWT(
 
     @Bean
     open fun tokenProvider(): TokenProvider =
-        SpringTokenProvider(context)
+        DynamicTokenProvider(context)
+
+    @Bean
+    @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    open fun requestTokenProvider(request: HttpServletRequest): RequestTokenProvider =
+        RequestTokenProvider(request)
 
     private fun authenticationFilter(): Filter {
         val filter = JWTAuthenticationFilter(
