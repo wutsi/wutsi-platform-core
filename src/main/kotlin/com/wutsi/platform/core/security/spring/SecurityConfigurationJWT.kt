@@ -1,7 +1,7 @@
 package com.wutsi.platform.core.security.spring
 
-import com.wutsi.platform.core.security.KeyProvider
 import com.wutsi.platform.core.security.TokenProvider
+import com.wutsi.platform.core.security.feign.FeignAuthorizationRequestInterceptor
 import com.wutsi.platform.core.security.spring.jwt.JWTAuthenticationFilter
 import com.wutsi.platform.core.security.spring.jwt.JWTAuthenticationProvider
 import com.wutsi.platform.core.security.spring.wutsi.WutsiKeyProvider
@@ -66,8 +66,8 @@ open class SecurityConfigurationJWT(
     }
 
     @Bean
-    open fun keyProvider(): KeyProvider =
-        WutsiKeyProvider(securityApi)
+    open fun authorizationRequestInterceptor(): FeignAuthorizationRequestInterceptor =
+        FeignAuthorizationRequestInterceptor(tokenProvider())
 
     @Bean
     open fun tokenProvider(): TokenProvider =
@@ -81,7 +81,7 @@ open class SecurityConfigurationJWT(
                     AntPathRequestMatcher("/**", "OPTIONS"),
                 )
             ),
-            keyProvider = keyProvider()
+            keyProvider = WutsiKeyProvider(securityApi)
         )
         filter.setAuthenticationManager(authenticationManagerBean())
         return filter
