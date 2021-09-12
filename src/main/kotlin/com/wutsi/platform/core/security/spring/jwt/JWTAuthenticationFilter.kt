@@ -26,7 +26,6 @@ class JWTAuthenticationFilter(
 
     override fun attemptAuthentication(request: HttpServletRequest, response: HttpServletResponse): Authentication? {
         val token = getToken(request)
-        LOGGER.debug("Token in request header: $token")
         val auth = if (token != null) {
             validate(token)
             JWTAuthentication.of(token)
