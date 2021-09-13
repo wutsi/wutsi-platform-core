@@ -30,7 +30,7 @@ class JWTAuthenticationFilter(
             validate(token)
             JWTAuthentication.of(token)
         } else {
-            LOGGER.debug("No token found in the header")
+            LOGGER.debug("${request.method} ${request.requestURI} - No token found in the header")
             AnonymousAuthentication()
         }
 

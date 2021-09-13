@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.44] - 2021-09-12
+### Changed
+- Add support for public endpoint for security
+
 ## [0.0.38] - 2021-09-10
 ### Changed
 - Return `downstreamCode` on error
