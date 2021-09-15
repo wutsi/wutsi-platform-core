@@ -30,7 +30,7 @@
     <maven-jacoco-plugin.version>0.8.7</maven-jacoco-plugin.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <slf4j.version>1.7.32</slf4j.version>
-    <spring.version>5.3.9</spring.version>
+    <spring.version>5.3.10</spring.version>
     <spring-security.version>5.5.2</spring-security.version>
     <spring-boot.version>2.5.4</spring-boot.version>
     <xmemcached.version>2.4.7</xmemcached.version>
