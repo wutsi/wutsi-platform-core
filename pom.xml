@@ -17,7 +17,7 @@
     <aws.version>1.12.66</aws.version>
     <feign.version>11.6</feign.version>
     <jackson.version>2.12.5</jackson.version>
-    <java-jwt.version>3.18.1</java-jwt.version>
+    <java-jwt.version>3.18.2</java-jwt.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
     <junit.version>5.7.2</junit.version>
     <klint.version>0.42.1</klint.version>
