@@ -3,12 +3,13 @@ package com.wutsi.platform.core.security.spring.jwt
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.RSAKeyProvider
+import com.wutsi.platform.core.security.SubjectType
 import java.util.Date
 
 class JWTBuilder(
     private val subject: String,
     private val subjectName: String,
-    private val subjectType: JWTSubjectType,
+    private val subjectType: SubjectType,
     private val keyProvider: RSAKeyProvider,
     private val admin: Boolean = false,
     private val ttl: Long = 84600,
