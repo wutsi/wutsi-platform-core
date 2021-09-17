@@ -2,6 +2,8 @@ package com.wutsi.platform.core.security.spring.jwt
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.interfaces.DecodedJWT
+import com.wutsi.platform.core.security.SubjectType
+import com.wutsi.platform.core.security.SubjectType.UNKNOWN
 import com.wutsi.platform.core.security.WutsiPrincipal
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
@@ -25,11 +27,18 @@ class JWTAuthentication(private val decodedJWT: DecodedJWT) : Authentication {
     init {
         principal = WutsiPrincipal(
             id = decodedJWT.subject,
-            type = decodedJWT.getClaim(JWTBuilder.CLAIM_SUBJECT_TYPE).asString() ?: "",
+            type = toSubjectType(decodedJWT),
             _name = decodedJWT.getClaim(JWTBuilder.CLAIM_SUBJECT_NAME).asString() ?: "",
             admin = decodedJWT.getClaim(JWTBuilder.CLAIM_ADMIN).asBoolean() ?: false
         )
     }
+
+    private fun toSubjectType(decodedJWT: DecodedJWT): SubjectType =
+        try {
+            SubjectType.valueOf(decodedJWT.getClaim(JWTBuilder.CLAIM_SUBJECT_TYPE).asString())
+        } catch (ex: Exception) {
+            UNKNOWN
+        }
 
     override fun getName(): String =
         decodedJWT.subject

@@ -25,7 +25,7 @@ internal class JWTAuthenticationTest {
         assertEquals("12345", principal.id)
         assertEquals("Ray Sponsible", principal.name)
         assertTrue(principal.admin)
-        assertEquals(USER.name, principal.type)
+        assertEquals(USER, principal.type)
     }
 
     private fun createAccessToken(): String =

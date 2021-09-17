@@ -5,7 +5,7 @@ import java.security.Principal
 class WutsiPrincipal(
     val id: String,
     private val _name: String,
-    val type: String,
+    val type: SubjectType,
     val admin: Boolean
 ) : Principal {
     override fun getName(): String =
