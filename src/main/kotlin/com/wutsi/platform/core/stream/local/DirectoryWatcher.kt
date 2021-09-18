@@ -47,7 +47,6 @@ class DirectoryWatcher(
             val path = watch.context()
             val file = File(directory, path.toFile().name)
             try {
-                System.out.println(">>> handing $file")
                 val json = Files.readString(file.toPath())
                 val event = mapper.readValue(json, Event::class.java)
                 handler.onEvent(event)
