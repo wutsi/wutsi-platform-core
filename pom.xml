@@ -35,7 +35,7 @@
     <spring-security.version>5.5.2</spring-security.version>
     <spring-boot.version>2.5.4</spring-boot.version>
     <xmemcached.version>2.4.7</xmemcached.version>
-    <wutsi-platform-security.version>0.0.4</wutsi-platform-security.version>
+    <wutsi-platform-security.version>0.0.6</wutsi-platform-security.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <kotlin.code.style>official</kotlin.code.style>
