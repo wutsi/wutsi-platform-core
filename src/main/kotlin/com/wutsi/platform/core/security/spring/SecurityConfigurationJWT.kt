@@ -19,7 +19,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher
@@ -40,7 +39,7 @@ import javax.servlet.http.HttpServletRequest
 open class SecurityConfigurationJWT(
     private val securityApi: WutsiSecurityApi,
     private val context: ApplicationContext,
-) : WebSecurityConfigurerAdapter() {
+) : AbstractWebSecurityConfiguration() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(SecurityConfigurationJWT::class.java)
     }
