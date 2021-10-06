@@ -8,7 +8,7 @@ This module provides the following Spring Cache implementations:
 | Property | Default Value | Description |
 |----------|---------------|-------------|
 | wutsi.platform.cache.type | none | Type of cache: `none` or local` or `memcached` |
-| wutsi.platform.cache.name | default | Name of the cache |
+| wutsi.platform.cache.name |  | **REQUIRED** Name of the cache |
 
 ### Memcached Configuration
 These are the additional configurations when `wutsi.platform.cache.type=memcached`

@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.43] - 2021-10-05
+### Changed
+- Enable caching configuration
+
 ## [0.0.44] - 2021-09-12
 ### Changed
 - Add support for public endpoint for security

@@ -16,7 +16,7 @@ import org.springframework.context.`annotation`.Configuration
     havingValue = "local"
 )
 open class CacheConfigurationLocal(
-    @Value("wutsi.platform.cache.name") private val name: String
+    @Value("\${wutsi.platform.cache.name}") private val name: String
 ) {
     @Bean
     open fun cacheManager(): CacheManager {

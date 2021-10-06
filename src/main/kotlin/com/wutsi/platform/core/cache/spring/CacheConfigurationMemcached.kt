@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration
     havingValue = "memcached"
 )
 open class CacheConfigurationMemcached(
-    @Value("wutsi.platform.cache.name") private val name: String,
+    @Value("\${wutsi.platform.cache.name}") private val name: String,
     @Value(value = "\${wutsi.platform.cache.memcached.username}") private val username: String,
     @Value(value = "\${wutsi.platform.cache.memcached.password}") private val password: String,
     @Value(value = "\${wutsi.platform.cache.memcached.servers}") private val servers: String,

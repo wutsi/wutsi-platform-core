@@ -1,5 +1,7 @@
 package com.wutsi.platform.core
 
+import com.wutsi.platform.core.cache.spring.CacheConfigurationLocal
+import com.wutsi.platform.core.cache.spring.CacheConfigurationMemcached
 import com.wutsi.platform.core.error.spring.ErrorConfiguration
 import com.wutsi.platform.core.logging.spring.LoggingConfiguration
 import com.wutsi.platform.core.security.spring.SecurityConfigurationJWT
@@ -17,6 +19,8 @@ import org.springframework.context.annotation.Import
 @Import(
     value = [
         ErrorConfiguration::class,
+        CacheConfigurationLocal::class,
+        CacheConfigurationMemcached::class,
         LoggingConfiguration::class,
         SecurityConfigurationJWT::class,
         SecurityConfigurationNone::class,
