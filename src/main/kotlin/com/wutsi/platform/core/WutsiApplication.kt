@@ -8,6 +8,8 @@ import com.wutsi.platform.core.security.spring.ApiKeyConfigurationEnv
 import com.wutsi.platform.core.security.spring.ApiKeyConfigurationHeader
 import com.wutsi.platform.core.security.spring.SecurityConfigurationJWT
 import com.wutsi.platform.core.security.spring.SecurityConfigurationNone
+import com.wutsi.platform.core.security.spring.TokenConfigurationCustom
+import com.wutsi.platform.core.security.spring.TokenConfigurationHeader
 import com.wutsi.platform.core.security.spring.WutsiSecurityAPIConfiguration
 import com.wutsi.platform.core.storage.spring.StorageConfigurationAws
 import com.wutsi.platform.core.storage.spring.StorageConfigurationLocal
@@ -33,6 +35,8 @@ import org.springframework.context.annotation.Import
         StorageConfigurationLocal::class,
         StorageConfigurationAws::class,
         TracingConfiguration::class,
+        TokenConfigurationCustom::class,
+        TokenConfigurationHeader::class,
         WutsiSecurityAPIConfiguration::class
     ]
 )

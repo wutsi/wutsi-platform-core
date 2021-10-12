@@ -1,7 +1,5 @@
 package com.wutsi.platform.core.security.spring
 
-import com.wutsi.platform.core.security.TokenProvider
-import com.wutsi.platform.core.security.feign.FeignAuthorizationRequestInterceptor
 import com.wutsi.platform.core.security.spring.jwt.JWTAuthenticationFilter
 import com.wutsi.platform.core.security.spring.jwt.JWTAuthenticationProvider
 import com.wutsi.platform.core.security.spring.wutsi.WutsiKeyProvider
@@ -10,11 +8,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.ApplicationContext
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
-import org.springframework.context.annotation.Scope
-import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
@@ -26,7 +20,6 @@ import org.springframework.security.web.util.matcher.NegatedRequestMatcher
 import org.springframework.security.web.util.matcher.OrRequestMatcher
 import org.springframework.security.web.util.matcher.RequestMatcher
 import javax.servlet.Filter
-import javax.servlet.http.HttpServletRequest
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -39,6 +32,7 @@ import javax.servlet.http.HttpServletRequest
 @ConfigurationProperties(prefix = "wutsi.platform.security")
 open class SecurityConfigurationJWT(
     private val securityApi: WutsiSecurityApi,
+    private val tokenProvider: RequestTokenProvider,
     private val context: ApplicationContext
 ) : AbstractWebSecurityConfiguration() {
     companion object {
@@ -73,20 +67,6 @@ open class SecurityConfigurationJWT(
     public override fun configure(auth: AuthenticationManagerBuilder) {
         auth.authenticationProvider(JWTAuthenticationProvider())
     }
-
-    @Bean
-    open fun authorizationRequestInterceptor(): FeignAuthorizationRequestInterceptor =
-        FeignAuthorizationRequestInterceptor(tokenProvider())
-
-    @Bean
-    @Primary
-    open fun tokenProvider(): TokenProvider =
-        DynamicTokenProvider(context)
-
-    @Bean
-    @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
-    open fun requestTokenProvider(request: HttpServletRequest): RequestTokenProvider =
-        RequestTokenProvider(request)
 
     private fun authenticationFilter(): Filter {
         val filter = JWTAuthenticationFilter(
