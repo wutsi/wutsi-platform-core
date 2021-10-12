@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest
 
 @Configuration
 @ConditionalOnProperty(
-    value = ["wutsi.platform.security.token-provider-type"],
+    value = ["wutsi.platform.security.token-provider.type"],
     havingValue = "header",
     matchIfMissing = true
 )

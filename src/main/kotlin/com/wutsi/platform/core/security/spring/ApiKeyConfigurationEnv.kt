@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @ConditionalOnProperty(
-    value = ["wutsi.platform.security.api-key-provider"],
+    value = ["wutsi.platform.security.api-key-provider.type"],
     havingValue = "env"
 )
 open class ApiKeyConfigurationEnv(

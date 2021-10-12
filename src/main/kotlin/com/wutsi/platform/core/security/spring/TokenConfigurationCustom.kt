@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @ConditionalOnProperty(
-    value = ["wutsi.platform.security.token-provider-type"],
+    value = ["wutsi.platform.security.token-provider.type"],
     havingValue = "custom"
 )
 open class TokenConfigurationCustom {

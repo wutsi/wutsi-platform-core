@@ -1,10 +1,10 @@
 # Change Log
 
-## [0.0.60] - 2021-10-12
+## [0.0.61] - 2021-10-12
 ### Added
 - Added provider for APIKey
 - Configure the type of TokenProvider: header vs custom
-- Update depedencies
+- Update dependencies
 
 ## [0.0.54] - 2021-10-10
 ### Added

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest
 
 @Configuration
 @ConditionalOnProperty(
-    value = ["wutsi.platform.security.api-key-provider"],
+    value = ["wutsi.platform.security.api-key-provider.type"],
     havingValue = "header",
     matchIfMissing = true
 )
