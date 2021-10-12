@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.57] - 2021-10-12
+### Added
+- Added provider for APIKey
+
 ## [0.0.54] - 2021-10-10
 ### Added
 - Added classes for forwarding the header `X-Api-Key`

@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import javax.servlet.http.HttpServletRequest
 
 @Configuration
@@ -19,7 +18,7 @@ import javax.servlet.http.HttpServletRequest
 )
 open class ApiKeyConfigurationHeader(
     protected val context: ApplicationContext
-) : WebSecurityConfigurerAdapter() {
+) {
     @Bean
     @Primary
     open fun apiKeyProvider(): ApiKeyProvider =
