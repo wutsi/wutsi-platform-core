@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.0.57] - 2021-10-12
+## [0.0.58] - 2021-10-12
 ### Added
 - Added provider for APIKey
 

@@ -1,6 +1,7 @@
 package com.wutsi.platform.core.security.spring
 
 import com.wutsi.platform.core.security.ApiKeyProvider
+import com.wutsi.platform.core.security.spring.wutsi.AbstractApiKeyConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
@@ -18,10 +19,10 @@ import javax.servlet.http.HttpServletRequest
 )
 open class ApiKeyConfigurationHeader(
     protected val context: ApplicationContext
-) {
+) : AbstractApiKeyConfiguration() {
     @Bean
     @Primary
-    open fun apiKeyProvider(): ApiKeyProvider =
+    override fun apiKeyProvider(): ApiKeyProvider =
         DynamicApiKeyProvider(context)
 
     @Bean
