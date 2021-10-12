@@ -57,6 +57,9 @@ class KVLoggerFilterTest {
             )
         ).whenever(request).parameterMap
 
+        doReturn("Bearer fdoifoidiof").whenever(request).getHeader("Authorization")
+        doReturn("feoireoireo").whenever(request).getHeader("X-Api-Key")
+
         // When
         filter.doFilter(request, response, chain)
 
@@ -65,10 +68,13 @@ class KVLoggerFilterTest {
         verify(kv).add("http_status", 201L)
         verify(kv).add("http_param_param1", value1.toList())
         verify(kv).add("http_param_param2", value2.toList())
+        verify(kv).add("authorization", "********")
+        verify(kv).add("api_key", "********")
         verify(kv).add("success", true)
 
         verify(kv).add("client_id", "client-id")
         verify(kv).add("device_id", "device-id")
+        verify(kv).add("trace_id", "trace-id")
         verify(kv).add("trace_id", "trace-id")
 
         verify(kv).log()

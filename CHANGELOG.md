@@ -1,6 +1,12 @@
 # Change Log
 
 ## [0.0.54] - 2021-10-10
+### Added
+- Added classes for forwarding the header `X-Api-Key`
+### Changed
+- Log authorization and api-key headers
+
+## [0.0.54] - 2021-10-10
 ### Changed
 - Configure the primary TracingContext
 

@@ -32,6 +32,7 @@ class CorsFilter : Filter {
         "Authorization",
         "Content-Length",
         "Accept-Language",
+        "X-Api-Key",
         "X-Requested-With",
         TracingContext.HEADER_CLIENT_ID,
         TracingContext.HEADER_DEVICE_ID,

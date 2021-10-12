@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Scope
 import org.springframework.context.annotation.ScopedProxyMode
 import org.springframework.http.HttpMethod
@@ -38,8 +39,8 @@ import javax.servlet.http.HttpServletRequest
 @ConfigurationProperties(prefix = "wutsi.platform.security")
 open class SecurityConfigurationJWT(
     private val securityApi: WutsiSecurityApi,
-    private val context: ApplicationContext,
-) : AbstractWebSecurityConfiguration() {
+    context: ApplicationContext,
+) : AbstractWebSecurityConfiguration(context) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(SecurityConfigurationJWT::class.java)
     }
@@ -78,6 +79,7 @@ open class SecurityConfigurationJWT(
         FeignAuthorizationRequestInterceptor(tokenProvider())
 
     @Bean
+    @Primary
     open fun tokenProvider(): TokenProvider =
         DynamicTokenProvider(context)
 
