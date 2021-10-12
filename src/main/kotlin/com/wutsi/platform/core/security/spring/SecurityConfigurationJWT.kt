@@ -39,8 +39,8 @@ import javax.servlet.http.HttpServletRequest
 @ConfigurationProperties(prefix = "wutsi.platform.security")
 open class SecurityConfigurationJWT(
     private val securityApi: WutsiSecurityApi,
-    context: ApplicationContext,
-) : AbstractWebSecurityConfiguration(context) {
+    private val context: ApplicationContext
+) : AbstractWebSecurityConfiguration() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(SecurityConfigurationJWT::class.java)
     }

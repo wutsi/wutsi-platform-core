@@ -2,7 +2,6 @@ package com.wutsi.platform.core.security.spring
 
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -13,9 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
     value = ["wutsi.platform.security.type"],
     havingValue = "none"
 )
-open class SecurityConfigurationNone(
-    context: ApplicationContext
-) : AbstractWebSecurityConfiguration(context) {
+open class SecurityConfigurationNone : AbstractWebSecurityConfiguration() {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(SecurityConfigurationNone::class.java)
     }

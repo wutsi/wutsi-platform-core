@@ -4,6 +4,8 @@ import com.wutsi.platform.core.cache.spring.CacheConfigurationLocal
 import com.wutsi.platform.core.cache.spring.CacheConfigurationMemcached
 import com.wutsi.platform.core.error.spring.ErrorConfiguration
 import com.wutsi.platform.core.logging.spring.LoggingConfiguration
+import com.wutsi.platform.core.security.spring.ApiKeyConfigurationEnv
+import com.wutsi.platform.core.security.spring.ApiKeyConfigurationHeader
 import com.wutsi.platform.core.security.spring.SecurityConfigurationJWT
 import com.wutsi.platform.core.security.spring.SecurityConfigurationNone
 import com.wutsi.platform.core.security.spring.WutsiSecurityAPIConfiguration
@@ -18,6 +20,8 @@ import org.springframework.context.annotation.Import
 @Target(AnnotationTarget.CLASS)
 @Import(
     value = [
+        ApiKeyConfigurationEnv::class,
+        ApiKeyConfigurationHeader::class,
         ErrorConfiguration::class,
         CacheConfigurationLocal::class,
         CacheConfigurationMemcached::class,
