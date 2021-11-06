@@ -35,7 +35,7 @@ internal class JWTAuthenticationTest {
             keyProvider = TestRSAKeyProvider(),
             scope = listOf("a", "b"),
             subject = "12345",
-            subjectName = "Ray Sponsible",
+            name = "Ray Sponsible",
             subjectType = USER
         ).build()
 }

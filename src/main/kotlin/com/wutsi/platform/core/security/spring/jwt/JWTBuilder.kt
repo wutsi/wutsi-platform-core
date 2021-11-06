@@ -8,31 +8,45 @@ import java.util.Date
 
 class JWTBuilder(
     private val subject: String,
-    private val subjectName: String,
     private val subjectType: SubjectType,
+    private val name: String? = null,
     private val keyProvider: RSAKeyProvider,
     private val admin: Boolean = false,
     private val ttl: Long = 84600,
-    private val scope: List<String> = emptyList()
+    private val scope: List<String> = emptyList(),
+    private val phoneNumber: String? = null,
+    private val email: String? = null
 ) {
     companion object {
         const val ISSUER = "wutsi.com"
         const val CLAIM_SUBJECT_TYPE = "sub_type"
-        const val CLAIM_SUBJECT_NAME = "sub_name"
+        const val CLAIM_NAME = "name"
+        const val CLAIM_PHONE_NUMBER = "phone_number"
+        const val CLAIM_EMAIL = "email"
         const val CLAIM_SCOPE = "scope"
         const val CLAIM_ADMIN = "admin"
     }
 
-    fun build(): String =
-        JWT.create()
+    fun build(): String {
+        val builder = JWT.create()
             .withIssuer(ISSUER)
             .withIssuedAt(Date(System.currentTimeMillis()))
             .withExpiresAt(Date(System.currentTimeMillis() + ttl))
             .withJWTId(keyProvider.privateKeyId)
             .withSubject(subject)
             .withClaim(CLAIM_SUBJECT_TYPE, subjectType.name)
-            .withClaim(CLAIM_SUBJECT_NAME, subjectName)
             .withClaim(CLAIM_SCOPE, scope)
             .withClaim(CLAIM_ADMIN, admin)
-            .sign(Algorithm.RSA256(keyProvider))
+
+        if (name != null)
+            builder.withClaim(CLAIM_NAME, name)
+
+        if (email != null)
+            builder.withClaim(CLAIM_EMAIL, email)
+
+        if (phoneNumber != null)
+            builder.withClaim(CLAIM_PHONE_NUMBER, phoneNumber)
+
+        return builder.sign(Algorithm.RSA256(keyProvider))
+    }
 }

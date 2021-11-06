@@ -28,7 +28,7 @@ class JWTAuthentication(private val decodedJWT: DecodedJWT) : Authentication {
         principal = WutsiPrincipal(
             id = decodedJWT.subject,
             type = toSubjectType(decodedJWT),
-            _name = decodedJWT.getClaim(JWTBuilder.CLAIM_SUBJECT_NAME).asString() ?: "",
+            _name = decodedJWT.getClaim(JWTBuilder.CLAIM_NAME).asString() ?: "",
             admin = decodedJWT.getClaim(JWTBuilder.CLAIM_ADMIN).asBoolean() ?: false
         )
     }

@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.63] - 2021-10-12
+### Updated
+- Added in the JWT the claims for `name`, `email` and `phone_number`
+
 ## [0.0.62] - 2021-10-12
 ### Added
 - Added provider for APIKey
