@@ -31,7 +31,7 @@ internal class CorsFilterTest {
         verify(response).addHeader("Access-Control-Allow-Methods", "GET, OPTIONS, HEAD, PUT, POST, DELETE")
         verify(response).addHeader(
             "Access-Control-Allow-Headers",
-            "Content-Type,Authorization,Content-Length,Accept-Language,X-Api-Key,X-Requested-With,X-Client-ID,X-Device-ID,X-Trace-ID"
+            "*"
         )
         verify(chain).doFilter(request, response)
     }
