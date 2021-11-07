@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.63] - 2021-11-07
+### Updated
+- Add CORS headers `Access-Control-Expose-Headers: *`
+
 ## [0.0.63] - 2021-10-12
 ### Updated
 - Added in the JWT the claims for `name`, `email` and `phone_number`
