@@ -14,6 +14,7 @@ class FeignTracingRequestInterceptor(
         template.header(TracingContext.HEADER_CLIENT_ID, clientId)
         template.header(TracingContext.HEADER_DEVICE_ID, tracingContext.deviceId())
         template.header(TracingContext.HEADER_TRACE_ID, traceId)
+        tracingContext.tenantId()?.let { template.header(TracingContext.HEADER_TENANT_ID, it) }
 
         /**
          * For Heroku integration. See https://devcenter.heroku.com/articles/http-request-id

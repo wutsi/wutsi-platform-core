@@ -6,6 +6,7 @@ interface TracingContext {
         const val HEADER_HEROKU_REQUEST_ID = "X-Request-ID"
         const val HEADER_CLIENT_ID = "X-Client-ID"
         const val HEADER_DEVICE_ID = "X-Device-ID"
+        const val HEADER_TENANT_ID = "X-Tenant-ID"
 
         const val NONE = "NONE"
     }
@@ -13,4 +14,5 @@ interface TracingContext {
     fun traceId(): String
     fun clientId(): String
     fun deviceId(): String
+    fun tenantId(): String?
 }
