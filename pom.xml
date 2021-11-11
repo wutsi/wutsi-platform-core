@@ -4,7 +4,7 @@
 
   <artifactId>wutsi-platform-core</artifactId>
   <groupId>com.wutsi</groupId>
-  <version>0.0.71-SNAPSHOT</version>
+  <version>0.0.72-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>wutsi-platform-core</name>
 
