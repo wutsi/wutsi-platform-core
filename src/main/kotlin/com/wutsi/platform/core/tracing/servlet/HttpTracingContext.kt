@@ -23,6 +23,6 @@ class HttpTracingContext {
     fun deviceId(request: HttpServletRequest, deviceIdProvider: DeviceIdProvider): String? =
         deviceIdProvider.get(request)
 
-    fun tenantId(request: HttpServletRequest): String =
+    fun tenantId(request: HttpServletRequest): String? =
         request.getHeader(TracingContext.HEADER_TENANT_ID)
 }
