@@ -14,6 +14,7 @@ class SpringTracingRequestInterceptor(
         request.headers[TracingContext.HEADER_CLIENT_ID] = listOf(tracingContext.clientId())
         request.headers[TracingContext.HEADER_TRACE_ID] = listOf(tracingContext.traceId())
         request.headers[TracingContext.HEADER_DEVICE_ID] = listOf(tracingContext.deviceId())
+        tracingContext.tenantId()?.let { request.headers[TracingContext.HEADER_TENANT_ID] = listOf(it) }
 
         return exec.execute(request, body)
     }
