@@ -2,8 +2,6 @@ package com.wutsi.platform.core.security.spring
 
 import com.wutsi.platform.core.security.spring.jwt.JWTAuthenticationFilter
 import com.wutsi.platform.core.security.spring.jwt.JWTAuthenticationProvider
-import com.wutsi.platform.core.security.spring.wutsi.WutsiKeyProvider
-import com.wutsi.platform.security.WutsiSecurityApi
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -31,7 +29,6 @@ import javax.servlet.Filter
 )
 @ConfigurationProperties(prefix = "wutsi.platform.security")
 open class SecurityConfigurationJWT(
-    private val securityApi: WutsiSecurityApi,
     private val tokenProvider: RequestTokenProvider,
     private val context: ApplicationContext
 ) : AbstractWebSecurityConfiguration() {
@@ -71,7 +68,6 @@ open class SecurityConfigurationJWT(
     private fun authenticationFilter(): Filter {
         val filter = JWTAuthenticationFilter(
             requestMatcher = securedEndpoints(),
-            keyProvider = WutsiKeyProvider(securityApi)
         )
         filter.setAuthenticationManager(authenticationManagerBean())
         return filter

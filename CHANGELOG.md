@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.74] - 2021-11-13
+### Updated
+- Disable JWT validation
+
 ## [0.0.63] - 2021-11-07
 ### Updated
 - Add CORS headers `Access-Control-Expose-Headers: *`

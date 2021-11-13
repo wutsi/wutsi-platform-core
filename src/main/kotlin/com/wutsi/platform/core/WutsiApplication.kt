@@ -10,7 +10,6 @@ import com.wutsi.platform.core.security.spring.SecurityConfigurationJWT
 import com.wutsi.platform.core.security.spring.SecurityConfigurationNone
 import com.wutsi.platform.core.security.spring.TokenConfigurationCustom
 import com.wutsi.platform.core.security.spring.TokenConfigurationHeader
-import com.wutsi.platform.core.security.spring.WutsiSecurityAPIConfiguration
 import com.wutsi.platform.core.storage.spring.StorageConfigurationAws
 import com.wutsi.platform.core.storage.spring.StorageConfigurationLocal
 import com.wutsi.platform.core.stream.spring.StreamConfigurationLocal
@@ -37,7 +36,6 @@ import org.springframework.context.annotation.Import
         TracingConfiguration::class,
         TokenConfigurationCustom::class,
         TokenConfigurationHeader::class,
-        WutsiSecurityAPIConfiguration::class
     ]
 )
 annotation class WutsiApplication
