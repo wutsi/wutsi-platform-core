@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.0.80] - 2021-11-13
+## [0.0.82] - 2021-11-13
 ### Fixed
 - Subscription configuration
 
