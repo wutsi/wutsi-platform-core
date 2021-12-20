@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.79] - 2021-11-13
+### Fixed
+- Subscription configuration
+
 ## [0.0.74] - 2021-11-13
 ### Updated
 - Disable JWT validation
