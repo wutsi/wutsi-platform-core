@@ -1,21 +1,18 @@
 package com.wutsi.platform.core.stream.spring
 
 import com.wutsi.platform.core.stream.EventStream
-import org.slf4j.LoggerFactory
-import javax.annotation.PostConstruct
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.context.annotation.Bean
 
-abstract class AbstractStreamConfiguration(private val subscriptions: Array<String>) {
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(AbstractStreamConfiguration::class.java)
-    }
-
+abstract class AbstractStreamConfiguration {
     abstract fun eventStream(): EventStream
 
-    @PostConstruct
-    fun init() {
-        subscriptions.forEach {
-            LOGGER.info("Subscribing to $it")
-            eventStream().subscribeTo(it)
-        }
-    }
+    @Bean
+    @ConfigurationProperties(prefix = "wutsi.platform.stream")
+    open fun streamProperties(): StreamConfigurationProperties =
+        StreamConfigurationProperties()
+
+    @Bean
+    open fun streamSubscriber(): StreamSubscriber =
+        StreamSubscriber(eventStream(), streamProperties())
 }

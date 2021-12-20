@@ -90,7 +90,7 @@ open class SecurityConfigurationJWT(
                 matchers.add(
                     AntPathRequestMatcher(
                         parts[1],
-                        HttpMethod.valueOf(parts[0].toUpperCase()).name
+                        HttpMethod.valueOf(parts[0].uppercase()).name
                     )
                 )
             } else {

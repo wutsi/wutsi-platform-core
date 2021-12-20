@@ -17,10 +17,10 @@ import org.springframework.context.annotation.Configuration
     matchIfMissing = true
 )
 open class CacheConfigurationNone(
-    @Value("wutsi.platform.cache.name") private val name: String
-) {
+    @Value("\${wutsi.platform.cache.name}") name: String,
+) : AbstractCacheConfiguration(name) {
     @Bean
-    open fun cacheManager(): CacheManager {
+    override fun cacheManager(): CacheManager {
         val cacheManager = SimpleCacheManager()
         cacheManager.setCaches(
             listOf(

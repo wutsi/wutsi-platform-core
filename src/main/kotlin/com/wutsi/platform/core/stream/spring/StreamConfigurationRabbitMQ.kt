@@ -7,10 +7,12 @@ import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.stream.EventStream
 import com.wutsi.platform.core.stream.rabbitmq.RabbitMQEventStream
 import com.wutsi.platform.core.stream.rabbitmq.RabbitMQHealthIndicator
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.actuate.health.HealthIndicator
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -22,17 +24,41 @@ import java.util.concurrent.ExecutorService
     value = ["wutsi.platform.stream.type"],
     havingValue = "rabbitmq"
 )
+@EnableConfigurationProperties(StreamConfigurationProperties::class)
 open class StreamConfigurationRabbitMQ(
-    @Autowired
-    private val eventPublisher: ApplicationEventPublisher,
+    @Autowired private val eventPublisher: ApplicationEventPublisher,
 
     @Value("\${wutsi.platform.stream.name}") private val name: String,
-    @Value("\${wutsi.platform.stream.subscriptions:}") subscriptions: Array<String>,
     @Value("\${wutsi.platform.stream.rabbitmq.url}") private val url: String,
     @Value("\${wutsi.platform.stream.rabbitmq.thread-pool-size:8}") private val threadPoolSize: Int,
     @Value("\${wutsi.platform.stream.rabbitmq.dlq.max-retries:10}") private val dlqMaxRetries: Int,
     @Value("\${wutsi.platform.stream.rabbitmq.queue-ttl-seconds:86400}") private val queueTtlSeconds: Long
-) : AbstractStreamConfiguration(subscriptions) {
+) : AbstractStreamConfiguration() {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(StreamConfigurationRabbitMQ::class.java)
+    }
+
+    @Scheduled(cron = "\${wutsi.platform.stream.rabbitmq.dlq.replay-cron:0 */15 * * * *}")
+    fun replayDlq() {
+        (eventStream() as RabbitMQEventStream).replayDlq()
+    }
+
+    @Bean(destroyMethod = "close")
+    override fun eventStream(): EventStream {
+        LOGGER.info("Creating EventStream: $name")
+        return RabbitMQEventStream(
+            name = name,
+            channel = channel(),
+            queueTtlSeconds = queueTtlSeconds,
+            dlqMaxRetries = dlqMaxRetries,
+            handler = object : EventHandler {
+                override fun onEvent(event: Event) {
+                    eventPublisher.publishEvent(event)
+                }
+            }
+        )
+    }
+
     @Bean
     open fun connectionFactory(): ConnectionFactory {
         val factory = ConnectionFactory()
@@ -49,25 +75,7 @@ open class StreamConfigurationRabbitMQ(
         .newConnection(executorService())
         .createChannel()
 
-    @Bean(destroyMethod = "close")
-    override fun eventStream(): EventStream = RabbitMQEventStream(
-        name = name,
-        channel = channel(),
-        queueTtlSeconds = queueTtlSeconds,
-        dlqMaxRetries = dlqMaxRetries,
-        handler = object : EventHandler {
-            override fun onEvent(event: Event) {
-                eventPublisher.publishEvent(event)
-            }
-        }
-    )
-
     @Bean
     open fun rabbitMQHealthIndicator(): HealthIndicator =
         RabbitMQHealthIndicator(channel())
-
-    @Scheduled(cron = "\${wutsi.platform.stream.rabbitmq.dlq.replay-cron:0 */15 * * * *}")
-    public fun replayDlq() {
-        (eventStream() as RabbitMQEventStream).replayDlq()
-    }
 }

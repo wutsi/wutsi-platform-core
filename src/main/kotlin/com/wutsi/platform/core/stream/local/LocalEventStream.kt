@@ -59,6 +59,7 @@ class LocalEventStream(
     }
 
     override fun subscribeTo(source: String) {
+        LOGGER.info("Subscribing: $source --> $name")
         val file = createOutputFile(source)
         watch(
             file,
