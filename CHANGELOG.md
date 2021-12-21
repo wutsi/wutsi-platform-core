@@ -75,7 +75,7 @@
 
 ## [0.0.18] - 2021-08-20
 ### Added
-- Support for securty configuration
+- Support for security configuration
 
 ## [0.0.12] - 2021-08-16
 ### Added
