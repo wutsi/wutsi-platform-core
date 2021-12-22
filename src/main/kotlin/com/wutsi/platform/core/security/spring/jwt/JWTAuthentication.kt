@@ -29,7 +29,8 @@ class JWTAuthentication(private val decodedJWT: DecodedJWT) : Authentication {
             id = decodedJWT.subject,
             type = toSubjectType(decodedJWT),
             _name = decodedJWT.getClaim(JWTBuilder.CLAIM_NAME).asString() ?: "",
-            admin = decodedJWT.getClaim(JWTBuilder.CLAIM_ADMIN).asBoolean() ?: false
+            admin = decodedJWT.getClaim(JWTBuilder.CLAIM_ADMIN).asBoolean() ?: false,
+            tenantId = decodedJWT.getClaim(JWTBuilder.CLAIM_TENANT_ID).asLong()
         )
     }
 

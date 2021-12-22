@@ -9,6 +9,7 @@ import java.util.Date
 class JWTBuilder(
     private val subject: String,
     private val subjectType: SubjectType,
+    private val tenantId: Long? = null,
     private val name: String? = null,
     private val keyProvider: RSAKeyProvider,
     private val admin: Boolean = false,
@@ -25,6 +26,7 @@ class JWTBuilder(
         const val CLAIM_EMAIL = "email"
         const val CLAIM_SCOPE = "scope"
         const val CLAIM_ADMIN = "admin"
+        const val CLAIM_TENANT_ID = "tenant_id"
     }
 
     fun build(): String {
@@ -37,6 +39,9 @@ class JWTBuilder(
             .withClaim(CLAIM_SUBJECT_TYPE, subjectType.name)
             .withClaim(CLAIM_SCOPE, scope)
             .withClaim(CLAIM_ADMIN, admin)
+
+        if (tenantId != null)
+            builder.withClaim(CLAIM_TENANT_ID, tenantId)
 
         if (name != null)
             builder.withClaim(CLAIM_NAME, name)
