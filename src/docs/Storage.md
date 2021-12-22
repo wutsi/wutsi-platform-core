@@ -29,16 +29,15 @@ These are the additional configurations when `wutsi.platform.storage.type=local`
 
 These are the additional configurations when `wutsi.platform.storage.type=aws`
 
-| Property                          | Default Value | Description                                                                                    |
-|-----------------------------------|---------------|------------------------------------------------------------------------------------------------|
-| wutsi.platform.storage.aws.region | us-east-1     | AWS Region                                                                                     |
-| wutsi.platform.storage.aws.bucket |               | Name of the S3 bucket where files are stored.**
-REQUIRED** if `wutsi.platform.storage.type=aws` |
+| Property                          | Default Value | Description                                                                                       |
+|-----------------------------------|---------------|---------------------------------------------------------------------------------------------------|
+| wutsi.platform.storage.aws.region | us-east-1     | AWS Region                                                                                        |
+| wutsi.platform.storage.aws.bucket |               | Name of the S3 bucket where files are stored. **REQUIRED** - if `wutsi.platform.storage.type=aws` |
 
 ## Beans
 
-| Name              | Type                                                    | Description                                                 |
-|-------------------|---------------------------------------------------------|-------------------------------------------------------------|
-| storageService    | com.wutsi.platform.core.storage.StorageService          | Instance of the service for storing files                   |
-| s3HealthIndicator | org.springframework.boot.actuate.health.HealthIndicator | S3 heath indicator (For `aws` storage only)                  |
+| Name              | Type             | Description                                                 |
+|-------------------|------------------|-------------------------------------------------------------|
+| storageService    | StorageService   | Instance of the service for storing files                   |
+| s3HealthIndicator | HealthIndicator  | S3 heath indicator (For `aws` storage only)                 |
 

@@ -14,9 +14,9 @@ Support for Spring Security
 
 ## Beans
 
-| Name                            | Type                                                                        | Description                                                        |
-|---------------------------------|-----------------------------------------------------------------------------|--------------------------------------------------------------------|
-| tokenProvider                   | com.wutsi.platform.core.security.TokenProvider                              | Returns the current authentication token                           |
-| authorizationRequestInterceptor | com.wutsi.platform.core.security.feign.FeignAuthorizationRequestInterceptor | Interceptor that add `Authorization` headers to all feign requests |
-| apiKeyProvider                  | com.wutsi.platform.core.security.ApiKeyProvider                             | Returns the current API key                                        |
-| apiKeyRequestInterceptor        | com.wutsi.platform.core.security.feign.FeignApiKeyRequestInterceptor        | Interceptor that add `X-Api-Key` headers to all feign requests     |
+| Name                            | Type                                  | Description                                                        |
+|---------------------------------|---------------------------------------|--------------------------------------------------------------------|
+| tokenProvider                   | TokenProvider                         | Returns the current authentication token                           |
+| authorizationRequestInterceptor | FeignAuthorizationRequestInterceptor  | Interceptor that add `Authorization` headers to all feign requests |
+| apiKeyProvider                  | ApiKeyProvider                        | Returns the current API key                                        |
+| apiKeyRequestInterceptor        | FeignApiKeyRequestInterceptor         | Interceptor that add `X-Api-Key` headers to all feign requests     |

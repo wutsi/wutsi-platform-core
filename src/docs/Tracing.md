@@ -19,14 +19,14 @@
 
 | Property                                              | Default Value | Description                                                                                           |
 |-------------------------------------------------------|---------------|-------------------------------------------------------------------------------------------------------|
-| wutsi.platform.tracing.client-id                      |               | REQUIRED - Value of the client ID associated with this application                                |
+| wutsi.platform.tracing.client-id                      |               | **REQUIRED** - Value of the client ID associated with this application                                |
 | wutsi.platform.tracing.device-id-provider.type        | header        | Type of Device ID provider: `header`                                                                  | `cookie` |
 | wutsi.platform.tracing.device-id-provider.cookie.name | _w_did        | Name of the cookie that contains the device ID. When `wutsi.platform.tracing.provider-id.type=cookie` |
 
 ## Beans
 
-| Name                      | Type                                                                 | Description                                       |
-|---------------------------|----------------------------------------------------------------------|---------------------------------------------------|
-| tracingContext            | com.wutsi.platform.core.tracing.TracingContext                       | Provide tracing context information               |
-| deviceIdProvider          | com.wutsi.platform.core.tracing.deviceIdProvider                     | Returns the value of the device-id                |
-| tracingRequestInterceptor | com.wutsi.platform.core.tracing.feign.FeignTracingRequestInterceptor | Add tracing information into all feign HTTP calls |
+| Name                      | Type                           | Description                                       |
+|---------------------------|--------------------------------|---------------------------------------------------|
+| tracingContext            | TracingContext                 | Provide tracing context information               |
+| deviceIdProvider          | DeviceIdProvider               | Returns the value of the device-id                |
+| tracingRequestInterceptor | FeignTracingRequestInterceptor | Add tracing information into all feign HTTP calls |

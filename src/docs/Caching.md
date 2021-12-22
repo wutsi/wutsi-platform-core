@@ -28,8 +28,8 @@ These are the additional configurations when `wutsi.platform.cache.type=memcache
 
 ## Beans
 
-| Name                      | Type                                                    | Description                                  |
-|---------------------------|---------------------------------------------------------|----------------------------------------------|
-| cache                     | org.springframework.cache.Cache                         | Instance of the cache                        |
-| memcachedHealthIndicator  | org.springframework.boot.actuate.health.HealthIndicator | Cache heath indicator (For `memcached` only) |
+| Name                      | Type             | Description                                  |
+|---------------------------|------------------|----------------------------------------------|
+| cache                     | Cache            | Instance of the cache                        |
+| memcachedHealthIndicator  | HealthIndicator  | Cache heath indicator (For `memcached` only) |
 

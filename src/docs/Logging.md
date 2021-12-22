@@ -4,10 +4,10 @@ This module for logging information in a key/value pair format.
 
 ## Beans
 
-| Name             | Type                                           | Description                                                                    |
-|------------------|------------------------------------------------|--------------------------------------------------------------------------------|
-| KVLogger         | com.wutsi.platform.core.logging.KVLogger       | Instance of the current logger                                                 |
-| KVLoggerFilter   | com.wutsi.platform.core.servlet.KVLoggerFilter | Servlet filter that add standard logging information for each request/response |
+| Name             | Type           | Description                                                                    |
+|------------------|----------------|--------------------------------------------------------------------------------|
+| KVLogger         | KVLogger       | Instance of the current logger                                                 |
+| KVLoggerFilter   | KVLoggerFilter | Servlet filter that add standard logging information for each request/response |
 
 ## HTTP Request Logging Information
 
