@@ -76,7 +76,10 @@ class DirectoryWatcher(
 
                 // Add TokenProvider into the ThreadLocal
                 ThreadLocalTokenProviderHolder.set(applicationTokenProvider)
-                logger.add("Authorization", applicationTokenProvider.getToken())
+                val token = applicationTokenProvider.getToken()
+                if (token != null) {
+                    logger.add("authorization", "***")
+                }
 
                 // Handle the event
                 handler.onEvent(event)
