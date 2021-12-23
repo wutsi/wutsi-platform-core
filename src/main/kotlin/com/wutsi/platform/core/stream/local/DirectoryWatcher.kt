@@ -1,6 +1,8 @@
 package com.wutsi.platform.core.stream.local
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.platform.core.logging.DefaultKVLogger
+import com.wutsi.platform.core.logging.ThreadLocalKVLoggerHolder
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.util.ObjectMapperBuilder
@@ -46,12 +48,23 @@ class DirectoryWatcher(
             val watch = it as WatchEvent<Path>
             val path = watch.context()
             val file = File(directory, path.toFile().name)
+
+            val logger = DefaultKVLogger()
+            ThreadLocalKVLoggerHolder.set(logger)
             try {
+                logger.add("localstream_file", file.path)
+
                 val json = Files.readString(file.toPath())
                 val event = mapper.readValue(json, Event::class.java)
                 handler.onEvent(event)
+
+                logger.add("success", true)
             } catch (ex: Exception) {
+                logger.setException(ex)
+                logger.add("success", false)
                 ex.printStackTrace()
+            } finally {
+                logger.log()
             }
         }
         key.reset()

@@ -12,14 +12,14 @@ import java.io.IOException
 import java.util.Optional
 import kotlin.test.assertEquals
 
-class RequestKVLoggerTest {
+class DefaultKVLoggerTest {
     private lateinit var logger: Logger
-    private lateinit var requestKv: RequestKVLogger
+    private lateinit var requestKv: DefaultKVLogger
 
     @BeforeEach
     fun setUp() {
         logger = mock(Logger::class.java)
-        requestKv = RequestKVLogger(logger, LoggerEncoder())
+        requestKv = DefaultKVLogger(logger, LoggerEncoder())
     }
 
     @Test
@@ -96,7 +96,8 @@ class RequestKVLoggerTest {
     @Throws(Exception::class)
     fun shouldLogAMaximumOf10000Characters() {
         // Given
-        val ch100 = "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"
+        val ch100 =
+            "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"
         val longString = StringBuilder()
         for (i in 0..999) {
             longString.append(ch100).append('\n')
@@ -112,7 +113,7 @@ class RequestKVLoggerTest {
         // Then
         val msg = ArgumentCaptor.forClass(String::class.java)
         verify(logger).info(msg.capture())
-        assertEquals(RequestKVLogger.MAX_LENGTH, msg.value.length)
+        assertEquals(DefaultKVLogger.MAX_LENGTH, msg.value.length)
     }
 
     @Test

@@ -6,12 +6,12 @@ import java.util.Collections
 import java.util.Optional
 import java.util.StringJoiner
 
-open class RequestKVLogger(
+open class DefaultKVLogger(
     private val logger: Logger = LOGGER,
     private val encoder: LoggerEncoder = LoggerEncoder()
 ) : KVLogger {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(RequestKVLogger::class.java)
+        private val LOGGER = LoggerFactory.getLogger(DefaultKVLogger::class.java)
         const val EXCEPTION = "exception"
         const val EXCEPTION_MESSAGE = "exception_message"
         const val KVPAIR_SEPARATOR = "="
