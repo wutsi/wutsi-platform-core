@@ -4,7 +4,7 @@
 
   <artifactId>wutsi-platform-core</artifactId>
   <groupId>com.wutsi</groupId>
-  <version>0.0.86-SNAPSHOT</version>
+  <version>0.0.86</version>
   <packaging>jar</packaging>
   <name>wutsi-platform-core</name>
 
@@ -41,7 +41,7 @@
 
   <scm>
     <developerConnection>scm:git:https://github.com/wutsi/wutsi-platform-core.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>wutsi-platform-core-0.0.86</tag>
   </scm>
   <distributionManagement>
     <repository>
