@@ -7,6 +7,8 @@ import com.rabbitmq.client.Channel
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.stream.EventStream
+import com.wutsi.platform.core.stream.EventTracingData
+import com.wutsi.platform.core.tracing.TracingContext
 import com.wutsi.platform.core.util.ObjectMapperBuilder
 import org.slf4j.LoggerFactory
 import java.nio.charset.Charset
@@ -24,7 +26,8 @@ class RabbitMQEventStream(
     private val handler: EventHandler,
     private val consumerSetupDelaySeconds: Long = 180,
     private val queueTtlSeconds: Long = 6 * 60 * 60, /* Queue TTL: 6 hours */
-    private val dlqMaxRetries: Int = 10
+    private val dlqMaxRetries: Int = 10,
+    private val tracingContext: TracingContext
 ) : EventStream {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(RabbitMQEventStream::class.java)
@@ -130,8 +133,6 @@ class RabbitMQEventStream(
 
     fun replayDlq() {
         LOGGER.info("Replaying DLQ")
-        val replayed = mutableSetOf<Long>()
-
         while (true) {
             // Get the response
             val response = channel.basicGet(queueDLQ, false) ?: break
@@ -168,7 +169,13 @@ class RabbitMQEventStream(
         id = UUID.randomUUID().toString(),
         type = type,
         timestamp = OffsetDateTime.now(),
-        payload = mapper.writeValueAsString(payload)
+        payload = mapper.writeValueAsString(payload),
+        tracingData = EventTracingData(
+            clientId = tracingContext.clientId(),
+            traceId = tracingContext.traceId(),
+            deviceId = tracingContext.deviceId(),
+            tenantId = tracingContext.tenantId()
+        )
     )
 
     private fun toTopicName(name: String) = "${name}_topic_out"

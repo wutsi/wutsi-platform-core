@@ -7,6 +7,7 @@ import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.stream.EventStream
 import com.wutsi.platform.core.stream.rabbitmq.RabbitMQEventStream
 import com.wutsi.platform.core.stream.rabbitmq.RabbitMQHealthIndicator
+import com.wutsi.platform.core.tracing.TracingContext
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -25,6 +26,7 @@ import java.util.concurrent.ExecutorService
 )
 open class StreamConfigurationRabbitMQ(
     @Autowired private val eventPublisher: ApplicationEventPublisher,
+    @Autowired private val tracingContext: TracingContext,
 
     @Value("\${wutsi.platform.stream.name}") private val name: String,
     @Value("\${wutsi.platform.stream.rabbitmq.url}") private val url: String,
@@ -49,6 +51,7 @@ open class StreamConfigurationRabbitMQ(
             channel = channel(),
             queueTtlSeconds = queueTtlSeconds,
             dlqMaxRetries = dlqMaxRetries,
+            tracingContext = tracingContext,
             handler = object : EventHandler {
                 override fun onEvent(event: Event) {
                     eventPublisher.publishEvent(event)

@@ -16,19 +16,24 @@ import com.rabbitmq.client.Envelope
 import com.rabbitmq.client.GetResponse
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
+import com.wutsi.platform.core.test.TestTracingContext
+import com.wutsi.platform.core.tracing.TracingContext
 import com.wutsi.platform.core.util.ObjectMapperBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 internal class RabbitMQEventStreamTest {
     private lateinit var channel: Channel
     private lateinit var handler: EventHandler
+    lateinit var tracingContext: TracingContext
 
     @BeforeEach
     fun setUp() {
         channel = mock()
         handler = mock()
+        tracingContext = TestTracingContext()
     }
 
     @Test
@@ -36,7 +41,8 @@ internal class RabbitMQEventStreamTest {
         RabbitMQEventStream(
             name = "foo",
             channel = channel,
-            handler = handler
+            handler = handler,
+            tracingContext = tracingContext
         )
 
         verify(channel).queueDeclare("foo_queue_dlq", true, false, false, emptyMap())
@@ -51,14 +57,14 @@ internal class RabbitMQEventStreamTest {
 
     @Test
     fun `queue consumer is delayed`() {
-        RabbitMQEventStream("foo", channel, handler)
+        RabbitMQEventStream("foo", channel, handler, tracingContext = tracingContext)
 
         verify(channel, never()).basicConsume(eq("foo_queue_in"), eq(false), any())
     }
 
     @Test
     fun `queue consumer is setup after a delay`() {
-        RabbitMQEventStream("foo", channel, handler, 5)
+        RabbitMQEventStream("foo", channel, handler, 5, tracingContext = tracingContext)
 
         Thread.sleep(20000)
         verify(channel).basicConsume(eq("foo_queue_in"), eq(false), any())
@@ -66,7 +72,14 @@ internal class RabbitMQEventStreamTest {
 
     @Test
     fun `message enqueued are pushed to the queue`() {
-        val stream = RabbitMQEventStream("foo", channel, handler, dlqMaxRetries = 11, queueTtlSeconds = 111)
+        val stream = RabbitMQEventStream(
+            "foo",
+            channel,
+            handler,
+            dlqMaxRetries = 11,
+            queueTtlSeconds = 111,
+            tracingContext = tracingContext
+        )
         stream.enqueue("foo", "bar")
 
         val json = argumentCaptor<ByteArray>()
@@ -80,7 +93,13 @@ internal class RabbitMQEventStreamTest {
 
         val event = ObjectMapperBuilder.build().readValue(json.firstValue, Event::class.java)
         assertEquals("foo", event.type)
+        assertNotNull(event.id, event.id)
         assertEquals("\"bar\"", event.payload)
+        assertEquals(tracingContext.traceId(), event.tracingData.traceId)
+        assertEquals(tracingContext.clientId(), event.tracingData.clientId)
+        assertEquals(tracingContext.deviceId(), event.tracingData.deviceId)
+        assertEquals(tracingContext.tenantId(), event.tracingData.tenantId)
+
         assertEquals(11, properties.firstValue.headers["x-max-retries"])
         assertEquals(0, properties.firstValue.headers["x-retries"])
         assertEquals("111000", properties.firstValue.expiration)
@@ -88,7 +107,14 @@ internal class RabbitMQEventStreamTest {
 
     @Test
     fun `message published are pushed to the topic`() {
-        val stream = RabbitMQEventStream("foo", channel, handler, dlqMaxRetries = 11, queueTtlSeconds = 111)
+        val stream = RabbitMQEventStream(
+            "foo",
+            channel,
+            handler,
+            dlqMaxRetries = 11,
+            queueTtlSeconds = 111,
+            tracingContext = tracingContext
+        )
         stream.publish("foo", "bar")
 
         val json = argumentCaptor<ByteArray>()
@@ -103,6 +129,11 @@ internal class RabbitMQEventStreamTest {
         val event = ObjectMapperBuilder.build().readValue(json.firstValue, Event::class.java)
         assertEquals("foo", event.type)
         assertEquals("\"bar\"", event.payload)
+        assertEquals(tracingContext.traceId(), event.tracingData.traceId)
+        assertEquals(tracingContext.clientId(), event.tracingData.clientId)
+        assertEquals(tracingContext.deviceId(), event.tracingData.deviceId)
+        assertEquals(tracingContext.tenantId(), event.tracingData.tenantId)
+
         assertEquals(11, properties.firstValue.headers["x-max-retries"])
         assertEquals(0, properties.firstValue.headers["x-retries"])
         assertEquals("111000", properties.firstValue.expiration)
@@ -110,7 +141,7 @@ internal class RabbitMQEventStreamTest {
 
     @Test
     fun `source topic bound to queue on subscribe`() {
-        val stream = RabbitMQEventStream("foo", channel, handler)
+        val stream = RabbitMQEventStream("foo", channel, handler, tracingContext = tracingContext)
         stream.subscribeTo("from")
 
         verify(channel).queueBind("foo_queue_in", "from_topic_out", "")
@@ -128,7 +159,7 @@ internal class RabbitMQEventStreamTest {
 
         doReturn(response).doReturn(null).whenever(channel).basicGet(any(), any())
 
-        val stream = RabbitMQEventStream("foo", channel, handler)
+        val stream = RabbitMQEventStream("foo", channel, handler, tracingContext = tracingContext)
         stream.replayDlq()
 
         val properties = argumentCaptor<BasicProperties>()
@@ -155,7 +186,7 @@ internal class RabbitMQEventStreamTest {
 
         doReturn(response).doReturn(null).whenever(channel).basicGet(any(), any())
 
-        val stream = RabbitMQEventStream("foo", channel, handler)
+        val stream = RabbitMQEventStream("foo", channel, handler, tracingContext = tracingContext)
         stream.replayDlq()
 
         verify(channel, never()).basicPublish(any(), any(), any(), any())

@@ -15,9 +15,9 @@ internal class ThreadLocalKVLoggerHolderTest {
     fun test() {
         assertNull(ThreadLocalKVLoggerHolder.get())
 
-        val logger = DefaultKVLogger()
-        ThreadLocalKVLoggerHolder.set(logger)
-        assertEquals(logger, ThreadLocalKVLoggerHolder.get())
+        val value = DefaultKVLogger()
+        ThreadLocalKVLoggerHolder.set(value)
+        assertEquals(value, ThreadLocalKVLoggerHolder.get())
 
         ThreadLocalKVLoggerHolder.remove()
         assertNull(ThreadLocalKVLoggerHolder.get())

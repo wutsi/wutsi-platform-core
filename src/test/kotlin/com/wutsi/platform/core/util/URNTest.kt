@@ -29,7 +29,7 @@ internal class URNTest {
     fun `parse URN with type-domain-name`() {
         val value = "URN:EVENT:wutsi:security:key-created"
         val urn = URN.parse(value)
-        assertEquals(value.toLowerCase(), urn.value)
+        assertEquals(value.lowercase(), urn.value)
     }
 
     @Test

@@ -5,6 +5,9 @@ import com.wutsi.platform.core.logging.DefaultKVLogger
 import com.wutsi.platform.core.logging.ThreadLocalKVLoggerHolder
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
+import com.wutsi.platform.core.stream.StreamLoggerHelper
+import com.wutsi.platform.core.tracing.DefaultTracingContext
+import com.wutsi.platform.core.tracing.ThreadLocalTracingContextHolder
 import com.wutsi.platform.core.util.ObjectMapperBuilder
 import java.io.File
 import java.nio.file.FileSystems
@@ -51,20 +54,33 @@ class DirectoryWatcher(
 
             val logger = DefaultKVLogger()
             ThreadLocalKVLoggerHolder.set(logger)
-            try {
-                logger.add("localstream_file", file.path)
+            logger.add("stream_file", file.path)
 
+            try {
                 val json = Files.readString(file.toPath())
                 val event = mapper.readValue(json, Event::class.java)
-                handler.onEvent(event)
+                StreamLoggerHelper.log(event, logger)
 
+                // Setup the tracing context
+                val tc = DefaultTracingContext(
+                    clientId = "_stream-local_",
+                    traceId = event.tracingData.traceId,
+                    deviceId = event.tracingData.deviceId,
+                    tenantId = event.tracingData.tenantId
+                )
+                ThreadLocalTracingContextHolder.set(tc)
+                StreamLoggerHelper.log(tc, logger)
+
+                // Handle the event
+                handler.onEvent(event)
                 logger.add("success", true)
             } catch (ex: Exception) {
                 logger.setException(ex)
                 logger.add("success", false)
-                ex.printStackTrace()
             } finally {
                 logger.log()
+
+                ThreadLocalKVLoggerHolder.remove()
             }
         }
         key.reset()

@@ -9,33 +9,42 @@ import com.wutsi.platform.core.logging.DefaultKVLogger
 import com.wutsi.platform.core.logging.ThreadLocalKVLoggerHolder
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
-import org.slf4j.LoggerFactory
+import com.wutsi.platform.core.stream.StreamLoggerHelper
+import com.wutsi.platform.core.tracing.DefaultTracingContext
+import com.wutsi.platform.core.tracing.ThreadLocalTracingContextHolder
 
 internal class RabbitMQConsumer(
     private val handler: EventHandler,
     private val mapper: ObjectMapper,
     channel: Channel
 ) : DefaultConsumer(channel) {
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(RabbitMQConsumer::class.java)
-    }
-
     override fun handleDelivery(
         consumerTag: String,
         envelope: Envelope,
         properties: BasicProperties,
         body: ByteArray
     ) {
-        LOGGER.info("handleDelivery($consumerTag, $envelope,$properties...)")
-
         // Set the logger
         val logger = DefaultKVLogger()
         ThreadLocalKVLoggerHolder.set(logger)
 
         logger.add("rabbitmq_consumer_tag", consumerTag)
         try {
-
+            // Read the event...
             val event = mapper.readValue(body, Event::class.java)
+            StreamLoggerHelper.log(event, logger)
+
+            // Setup the tracing context
+            val tc = DefaultTracingContext(
+                clientId = "_rabbitmq_",
+                traceId = event.tracingData.traceId,
+                deviceId = event.tracingData.deviceId,
+                tenantId = event.tracingData.tenantId
+            )
+            ThreadLocalTracingContextHolder.set(tc)
+            StreamLoggerHelper.log(tc, logger)
+
+            // Process the event
             handler.onEvent(event)
             channel.basicAck(envelope.deliveryTag, false)
 
@@ -50,6 +59,10 @@ internal class RabbitMQConsumer(
             )
         } finally {
             logger.log()
+
+            // Clear the tracing context
+            ThreadLocalKVLoggerHolder.remove()
+            ThreadLocalTracingContextHolder.remove()
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.wutsi.platform.core.tracing.spring
 
+import com.wutsi.platform.core.tracing.ThreadLocalTracingContextHolder
 import com.wutsi.platform.core.tracing.TracingContext
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
@@ -29,5 +30,5 @@ open class DynamicTracingContext(private val context: ApplicationContext) : Trac
         if (RequestContextHolder.getRequestAttributes() != null)
             context.getBean(RequestTracingContext::class.java)
         else
-            null
+            ThreadLocalTracingContextHolder.get()
 }

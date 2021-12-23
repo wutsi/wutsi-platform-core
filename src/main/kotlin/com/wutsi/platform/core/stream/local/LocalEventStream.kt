@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.stream.EventStream
+import com.wutsi.platform.core.stream.EventTracingData
+import com.wutsi.platform.core.tracing.TracingContext
 import com.wutsi.platform.core.util.ObjectMapperBuilder
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -22,7 +24,8 @@ class LocalEventStream(
     private val name: String,
     private val root: File,
     private val handler: EventHandler,
-    private val pollDelayMilliseconds: Long = 300
+    private val pollDelayMilliseconds: Long = 300,
+    private val tracingContext: TracingContext
 ) : EventStream {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(LocalEventStream::class.java)
@@ -93,7 +96,13 @@ class LocalEventStream(
         id = UUID.randomUUID().toString(),
         type = type,
         timestamp = OffsetDateTime.now(),
-        payload = mapper.writeValueAsString(payload)
+        payload = mapper.writeValueAsString(payload),
+        tracingData = EventTracingData(
+            clientId = tracingContext.clientId(),
+            traceId = tracingContext.traceId(),
+            deviceId = tracingContext.deviceId(),
+            tenantId = tracingContext.tenantId()
+        )
     )
 
     private fun createIntputFile(name: String) = File(File(root, name), INPUT)

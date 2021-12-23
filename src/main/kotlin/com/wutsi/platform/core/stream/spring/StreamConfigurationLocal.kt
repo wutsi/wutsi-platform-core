@@ -4,6 +4,7 @@ import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.stream.EventStream
 import com.wutsi.platform.core.stream.local.LocalEventStream
+import com.wutsi.platform.core.tracing.TracingContext
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -20,6 +21,7 @@ import java.io.File
 )
 open class StreamConfigurationLocal(
     @Autowired private val eventPublisher: ApplicationEventPublisher,
+    @Autowired private val tracingContext: TracingContext,
 
     @Value("\${wutsi.platform.stream.name}") private val name: String,
     @Value("\${wutsi.platform.stream.local.directory:\${user.home}/wutsi/stream}") private val directory: String
@@ -34,6 +36,7 @@ open class StreamConfigurationLocal(
         return LocalEventStream(
             name = name,
             root = File(directory),
+            tracingContext = tracingContext,
             handler = object : EventHandler {
                 override fun onEvent(event: Event) {
                     eventPublisher.publishEvent(event)

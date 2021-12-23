@@ -36,7 +36,13 @@ internal class RabbitMQConsumerTest {
             {
               "id": "123",
               "type": "Yo",
-              "payload": "Man"
+              "payload": "Man",
+              "tracingData":{
+                 "clientId": "test",
+                 "deviceId": "xxxxx",
+                 "tenantId": "7777",
+                 "traceId": "xxxx-xxxxx-xxxx-xxxx"
+              }
             }
         """.trimIndent()
 
@@ -52,6 +58,10 @@ internal class RabbitMQConsumerTest {
         assertEquals("123", event.firstValue.id)
         assertEquals("Man", event.firstValue.payload)
         assertEquals("Yo", event.firstValue.type)
+        assertEquals("xxxxx", event.firstValue.tracingData.deviceId)
+        assertEquals("test", event.firstValue.tracingData.clientId)
+        assertEquals("xxxx-xxxxx-xxxx-xxxx", event.firstValue.tracingData.traceId)
+        assertEquals("7777", event.firstValue.tracingData.tenantId)
     }
 
     @Test

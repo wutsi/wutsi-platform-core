@@ -11,5 +11,5 @@ abstract class AbstractCacheConfiguration(
 
     @Bean
     open fun cache(): Cache =
-        cacheManager().getCache(name)
+        cacheManager().getCache(name)!!
 }

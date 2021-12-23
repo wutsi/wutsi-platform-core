@@ -5,6 +5,8 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
+import com.wutsi.platform.core.test.TestTracingContext
+import com.wutsi.platform.core.tracing.TracingContext
 import com.wutsi.platform.core.util.ObjectMapperBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -16,6 +18,8 @@ import kotlin.test.assertNotNull
 internal class LocalEventStreamTest {
     lateinit var handler: EventHandler
     lateinit var stream: LocalEventStream
+    lateinit var tracingContext: TracingContext
+
     val root = File(System.getProperty("user.home") + "/wutsi/file-stream")
 
     @BeforeEach
@@ -23,7 +27,13 @@ internal class LocalEventStreamTest {
         root.deleteRecursively()
 
         handler = mock()
-        stream = LocalEventStream(name = "keystore/test", root = root, handler = handler)
+        tracingContext = TestTracingContext()
+        stream = LocalEventStream(
+            name = "keystore/test",
+            root = root,
+            handler = handler,
+            tracingContext = tracingContext
+        )
     }
 
     @Test
@@ -72,7 +82,8 @@ internal class LocalEventStreamTest {
         val source = LocalEventStream(
             root = root,
             name = "source",
-            handler = mock()
+            handler = mock(),
+            tracingContext = tracingContext
         )
 
         stream.subscribeTo("source")
