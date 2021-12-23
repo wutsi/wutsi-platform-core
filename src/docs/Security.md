@@ -14,7 +14,5 @@ Support for Spring Security
 | Name                             | Type                                 | Description                                                        |
 |----------------------------------|--------------------------------------|--------------------------------------------------------------------|
 | tokenProvider                    | TokenProvider                        | Returns the current authentication token                           |
-| applicationTokenProvider         | TokenProvider                        | Returns the current application token                              |
+| applicationTokenProvider         | ApplicationTokenProvider             | Returns the current application token                              |
 | authorizationRequestInterceptor  | FeignAuthorizationRequestInterceptor | Interceptor that add `Authorization` headers to all feign requests |
-| apiKeyProvider                   | ApiKeyProvider                       | Returns the current API key                                        |
-| apiKeyRequestInterceptor         | FeignApiKeyRequestInterceptor        | Interceptor that add `X-Api-Key` headers to all feign requests     |
