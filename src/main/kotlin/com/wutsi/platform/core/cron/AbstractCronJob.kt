@@ -2,6 +2,8 @@ package com.wutsi.platform.core.cron
 
 import com.wutsi.platform.core.logging.DefaultKVLogger
 import com.wutsi.platform.core.logging.ThreadLocalKVLoggerHolder
+import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
+import com.wutsi.platform.core.security.spring.ThreadLocalTokenProviderHolder
 import com.wutsi.platform.core.tracing.DefaultTracingContext
 import com.wutsi.platform.core.tracing.ThreadLocalTracingContextHolder
 import java.util.UUID
@@ -10,6 +12,8 @@ abstract class AbstractCronJob : CronJob {
     abstract fun doRun(): Long
 
     abstract fun getJobName(): String
+
+    abstract fun getToken(): String
 
     override fun run() {
         // Add Logger into the ThreadLocal
@@ -30,6 +34,11 @@ abstract class AbstractCronJob : CronJob {
         logger.add("device_id", tc.deviceId())
         logger.add("tenant_id", tc.tenantId())
 
+        // Add TokenProvider into the ThreadLocale
+        val tokenProvider = ApplicationTokenProvider(getToken())
+        ThreadLocalTokenProviderHolder.set(tokenProvider)
+        logger.add("Authorization", tokenProvider.getToken())
+
         try {
             val result = doRun()
 
@@ -44,6 +53,7 @@ abstract class AbstractCronJob : CronJob {
             // Clear the context
             ThreadLocalTracingContextHolder.remove()
             ThreadLocalKVLoggerHolder.remove()
+            ThreadLocalTokenProviderHolder.remove()
         }
     }
 }

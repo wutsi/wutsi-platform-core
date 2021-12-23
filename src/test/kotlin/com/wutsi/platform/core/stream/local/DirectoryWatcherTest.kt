@@ -1,5 +1,6 @@
 package com.wutsi.platform.core.stream.local
 
+import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.util.ObjectMapperBuilder
@@ -15,10 +16,13 @@ import kotlin.test.assertNotNull
 internal class DirectoryWatcherTest {
     lateinit var directory: File
     lateinit var handler: EventHandler
+    lateinit var applicationTokenProvider: ApplicationTokenProvider
     var event: Event? = null
 
     @BeforeEach
     fun setUp() {
+        applicationTokenProvider = ApplicationTokenProvider()
+
         directory = File(System.getProperty("user.home") + "/wutsi/directory-watcher")
         directory.deleteRecursively()
         directory.mkdirs()
@@ -34,7 +38,7 @@ internal class DirectoryWatcherTest {
 
     @Test
     fun `consume new file`() {
-        DirectoryWatcher(directory, handler)
+        DirectoryWatcher(directory, handler, applicationTokenProvider)
 
         // Write file
         val evt = createEvent()

@@ -10,6 +10,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.Envelope
+import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import org.junit.jupiter.api.BeforeEach
@@ -21,13 +22,15 @@ internal class RabbitMQConsumerTest {
     private lateinit var handler: EventHandler
     private lateinit var channel: Channel
     private lateinit var consumer: RabbitMQConsumer
+    private lateinit var applicationTokenProvider: ApplicationTokenProvider
 
     @BeforeEach
     fun setUp() {
         handler = mock()
         channel = mock()
+        applicationTokenProvider = ApplicationTokenProvider()
 
-        consumer = RabbitMQConsumer(handler, ObjectMapper(), channel)
+        consumer = RabbitMQConsumer(handler, ObjectMapper(), applicationTokenProvider, channel)
     }
 
     @Test

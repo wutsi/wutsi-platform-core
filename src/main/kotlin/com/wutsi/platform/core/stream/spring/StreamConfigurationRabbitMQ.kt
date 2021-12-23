@@ -2,6 +2,7 @@ package com.wutsi.platform.core.stream.spring
 
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.ConnectionFactory
+import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.stream.EventStream
@@ -27,6 +28,7 @@ import java.util.concurrent.ExecutorService
 open class StreamConfigurationRabbitMQ(
     @Autowired private val eventPublisher: ApplicationEventPublisher,
     @Autowired private val tracingContext: TracingContext,
+    @Autowired private val applicationTokenProvider: ApplicationTokenProvider,
 
     @Value("\${wutsi.platform.stream.name}") private val name: String,
     @Value("\${wutsi.platform.stream.rabbitmq.url}") private val url: String,
@@ -52,6 +54,7 @@ open class StreamConfigurationRabbitMQ(
             queueTtlSeconds = queueTtlSeconds,
             dlqMaxRetries = dlqMaxRetries,
             tracingContext = tracingContext,
+            applicationTokenProvider = applicationTokenProvider,
             handler = object : EventHandler {
                 override fun onEvent(event: Event) {
                     eventPublisher.publishEvent(event)

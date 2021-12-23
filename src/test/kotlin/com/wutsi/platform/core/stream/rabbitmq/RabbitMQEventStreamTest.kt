@@ -14,6 +14,7 @@ import com.rabbitmq.client.BuiltinExchangeType
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.Envelope
 import com.rabbitmq.client.GetResponse
+import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.test.TestTracingContext
@@ -27,13 +28,15 @@ import kotlin.test.assertNotNull
 internal class RabbitMQEventStreamTest {
     private lateinit var channel: Channel
     private lateinit var handler: EventHandler
-    lateinit var tracingContext: TracingContext
+    private lateinit var tracingContext: TracingContext
+    private lateinit var applicationTokenProvider: ApplicationTokenProvider
 
     @BeforeEach
     fun setUp() {
         channel = mock()
         handler = mock()
         tracingContext = TestTracingContext()
+        applicationTokenProvider = ApplicationTokenProvider()
     }
 
     @Test
@@ -42,7 +45,8 @@ internal class RabbitMQEventStreamTest {
             name = "foo",
             channel = channel,
             handler = handler,
-            tracingContext = tracingContext
+            tracingContext = tracingContext,
+            applicationTokenProvider = applicationTokenProvider
         )
 
         verify(channel).queueDeclare("foo_queue_dlq", true, false, false, emptyMap())
@@ -57,14 +61,27 @@ internal class RabbitMQEventStreamTest {
 
     @Test
     fun `queue consumer is delayed`() {
-        RabbitMQEventStream("foo", channel, handler, tracingContext = tracingContext)
+        RabbitMQEventStream(
+            "foo",
+            channel,
+            handler,
+            tracingContext = tracingContext,
+            applicationTokenProvider = applicationTokenProvider
+        )
 
         verify(channel, never()).basicConsume(eq("foo_queue_in"), eq(false), any())
     }
 
     @Test
     fun `queue consumer is setup after a delay`() {
-        RabbitMQEventStream("foo", channel, handler, 5, tracingContext = tracingContext)
+        RabbitMQEventStream(
+            "foo",
+            channel,
+            handler,
+            5,
+            tracingContext = tracingContext,
+            applicationTokenProvider = applicationTokenProvider
+        )
 
         Thread.sleep(20000)
         verify(channel).basicConsume(eq("foo_queue_in"), eq(false), any())
@@ -78,7 +95,8 @@ internal class RabbitMQEventStreamTest {
             handler,
             dlqMaxRetries = 11,
             queueTtlSeconds = 111,
-            tracingContext = tracingContext
+            tracingContext = tracingContext,
+            applicationTokenProvider = applicationTokenProvider
         )
         stream.enqueue("foo", "bar")
 
@@ -113,7 +131,8 @@ internal class RabbitMQEventStreamTest {
             handler,
             dlqMaxRetries = 11,
             queueTtlSeconds = 111,
-            tracingContext = tracingContext
+            tracingContext = tracingContext,
+            applicationTokenProvider = applicationTokenProvider
         )
         stream.publish("foo", "bar")
 
@@ -141,7 +160,13 @@ internal class RabbitMQEventStreamTest {
 
     @Test
     fun `source topic bound to queue on subscribe`() {
-        val stream = RabbitMQEventStream("foo", channel, handler, tracingContext = tracingContext)
+        val stream = RabbitMQEventStream(
+            "foo",
+            channel,
+            handler,
+            tracingContext = tracingContext,
+            applicationTokenProvider = applicationTokenProvider
+        )
         stream.subscribeTo("from")
 
         verify(channel).queueBind("foo_queue_in", "from_topic_out", "")
@@ -159,7 +184,13 @@ internal class RabbitMQEventStreamTest {
 
         doReturn(response).doReturn(null).whenever(channel).basicGet(any(), any())
 
-        val stream = RabbitMQEventStream("foo", channel, handler, tracingContext = tracingContext)
+        val stream = RabbitMQEventStream(
+            "foo",
+            channel,
+            handler,
+            tracingContext = tracingContext,
+            applicationTokenProvider = applicationTokenProvider
+        )
         stream.replayDlq()
 
         val properties = argumentCaptor<BasicProperties>()
@@ -186,7 +217,13 @@ internal class RabbitMQEventStreamTest {
 
         doReturn(response).doReturn(null).whenever(channel).basicGet(any(), any())
 
-        val stream = RabbitMQEventStream("foo", channel, handler, tracingContext = tracingContext)
+        val stream = RabbitMQEventStream(
+            "foo",
+            channel,
+            handler,
+            tracingContext = tracingContext,
+            applicationTokenProvider = applicationTokenProvider
+        )
         stream.replayDlq()
 
         verify(channel, never()).basicPublish(any(), any(), any(), any())

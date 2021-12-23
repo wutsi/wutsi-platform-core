@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.rabbitmq.client.AMQP
 import com.rabbitmq.client.BuiltinExchangeType
 import com.rabbitmq.client.Channel
+import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.stream.EventStream
@@ -27,7 +28,8 @@ class RabbitMQEventStream(
     private val consumerSetupDelaySeconds: Long = 180,
     private val queueTtlSeconds: Long = 6 * 60 * 60, /* Queue TTL: 6 hours */
     private val dlqMaxRetries: Int = 10,
-    private val tracingContext: TracingContext
+    private val tracingContext: TracingContext,
+    private val applicationTokenProvider: ApplicationTokenProvider
 ) : EventStream {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(RabbitMQEventStream::class.java)
@@ -86,7 +88,7 @@ class RabbitMQEventStream(
                 channel.basicConsume(
                     queue,
                     false, /* auto-ack */
-                    RabbitMQConsumer(handler, mapper, channel)
+                    RabbitMQConsumer(handler, mapper, applicationTokenProvider, channel)
                 )
             }
         }

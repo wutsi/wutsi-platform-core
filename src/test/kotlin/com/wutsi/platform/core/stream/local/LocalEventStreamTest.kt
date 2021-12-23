@@ -3,6 +3,7 @@ package com.wutsi.platform.core.stream.local
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.test.TestTracingContext
@@ -19,6 +20,7 @@ internal class LocalEventStreamTest {
     lateinit var handler: EventHandler
     lateinit var stream: LocalEventStream
     lateinit var tracingContext: TracingContext
+    lateinit var applicationTokenProvider: ApplicationTokenProvider
 
     val root = File(System.getProperty("user.home") + "/wutsi/file-stream")
 
@@ -28,11 +30,13 @@ internal class LocalEventStreamTest {
 
         handler = mock()
         tracingContext = TestTracingContext()
+        applicationTokenProvider = ApplicationTokenProvider()
         stream = LocalEventStream(
             name = "keystore/test",
             root = root,
             handler = handler,
-            tracingContext = tracingContext
+            tracingContext = tracingContext,
+            applicationTokenProvider = applicationTokenProvider
         )
     }
 
@@ -83,7 +87,8 @@ internal class LocalEventStreamTest {
             root = root,
             name = "source",
             handler = mock(),
-            tracingContext = tracingContext
+            tracingContext = tracingContext,
+            applicationTokenProvider = applicationTokenProvider
         )
 
         stream.subscribeTo("source")

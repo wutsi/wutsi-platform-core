@@ -1,5 +1,6 @@
 package com.wutsi.platform.core.stream.spring
 
+import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.stream.EventStream
@@ -22,6 +23,7 @@ import java.io.File
 open class StreamConfigurationLocal(
     @Autowired private val eventPublisher: ApplicationEventPublisher,
     @Autowired private val tracingContext: TracingContext,
+    @Autowired private val applicationTokenProvider: ApplicationTokenProvider,
 
     @Value("\${wutsi.platform.stream.name}") private val name: String,
     @Value("\${wutsi.platform.stream.local.directory:\${user.home}/wutsi/stream}") private val directory: String
@@ -37,6 +39,7 @@ open class StreamConfigurationLocal(
             name = name,
             root = File(directory),
             tracingContext = tracingContext,
+            applicationTokenProvider = applicationTokenProvider,
             handler = object : EventHandler {
                 override fun onEvent(event: Event) {
                     eventPublisher.publishEvent(event)

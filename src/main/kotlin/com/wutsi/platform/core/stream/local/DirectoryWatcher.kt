@@ -3,6 +3,8 @@ package com.wutsi.platform.core.stream.local
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.core.logging.DefaultKVLogger
 import com.wutsi.platform.core.logging.ThreadLocalKVLoggerHolder
+import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
+import com.wutsi.platform.core.security.spring.ThreadLocalTokenProviderHolder
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.stream.StreamLoggerHelper
@@ -30,6 +32,7 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 class DirectoryWatcher(
     private val directory: File,
     private val handler: EventHandler,
+    private val applicationTokenProvider: ApplicationTokenProvider,
     private val pollDelayMilliseconds: Long = 1000,
     private val executor: ScheduledExecutorService = Executors.newScheduledThreadPool(1)
 ) : Runnable {
@@ -71,6 +74,10 @@ class DirectoryWatcher(
                 ThreadLocalTracingContextHolder.set(tc)
                 StreamLoggerHelper.log(tc, logger)
 
+                // Add TokenProvider into the ThreadLocal
+                ThreadLocalTokenProviderHolder.set(applicationTokenProvider)
+                logger.add("Authorization", applicationTokenProvider.getToken())
+
                 // Handle the event
                 handler.onEvent(event)
                 logger.add("success", true)
@@ -81,6 +88,8 @@ class DirectoryWatcher(
                 logger.log()
 
                 ThreadLocalKVLoggerHolder.remove()
+                ThreadLocalTokenProviderHolder.remove()
+                ThreadLocalTracingContextHolder.remove()
             }
         }
         key.reset()

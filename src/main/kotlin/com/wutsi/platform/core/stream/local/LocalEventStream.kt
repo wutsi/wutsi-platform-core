@@ -1,6 +1,7 @@
 package com.wutsi.platform.core.stream.local
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.stream.EventStream
@@ -25,7 +26,8 @@ class LocalEventStream(
     private val root: File,
     private val handler: EventHandler,
     private val pollDelayMilliseconds: Long = 300,
-    private val tracingContext: TracingContext
+    private val tracingContext: TracingContext,
+    private val applicationTokenProvider: ApplicationTokenProvider
 ) : EventStream {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(LocalEventStream::class.java)
@@ -89,7 +91,8 @@ class LocalEventStream(
         directory = directory,
         handler = handler,
         pollDelayMilliseconds = pollDelayMilliseconds,
-        executor = executor
+        executor = executor,
+        applicationTokenProvider = applicationTokenProvider
     )
 
     private fun createEvent(type: String, payload: Any) = Event(

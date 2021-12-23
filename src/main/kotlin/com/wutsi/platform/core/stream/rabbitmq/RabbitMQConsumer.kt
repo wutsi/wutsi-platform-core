@@ -7,6 +7,8 @@ import com.rabbitmq.client.DefaultConsumer
 import com.rabbitmq.client.Envelope
 import com.wutsi.platform.core.logging.DefaultKVLogger
 import com.wutsi.platform.core.logging.ThreadLocalKVLoggerHolder
+import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
+import com.wutsi.platform.core.security.spring.ThreadLocalTokenProviderHolder
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.stream.StreamLoggerHelper
@@ -16,6 +18,7 @@ import com.wutsi.platform.core.tracing.ThreadLocalTracingContextHolder
 internal class RabbitMQConsumer(
     private val handler: EventHandler,
     private val mapper: ObjectMapper,
+    private val applicationTokenProvider: ApplicationTokenProvider,
     channel: Channel
 ) : DefaultConsumer(channel) {
     override fun handleDelivery(
@@ -43,6 +46,10 @@ internal class RabbitMQConsumer(
             )
             ThreadLocalTracingContextHolder.set(tc)
             StreamLoggerHelper.log(tc, logger)
+
+            // Add TokenProvider into the ThreadLocal
+            ThreadLocalTokenProviderHolder.set(applicationTokenProvider)
+            logger.add("Authorization", applicationTokenProvider.getToken())
 
             // Process the event
             handler.onEvent(event)
