@@ -13,7 +13,7 @@ abstract class AbstractCronJob : CronJob {
 
     abstract fun getJobName(): String
 
-    abstract fun getToken(): String
+    abstract fun getToken(): String?
 
     override fun run() {
         // Add Logger into the ThreadLocal
