@@ -24,7 +24,7 @@ internal class RabbitMQConsumer(
         properties: BasicProperties,
         body: ByteArray
     ) {
-        // Set the logger
+        // Add Logger into the ThreadLocal
         val logger = DefaultKVLogger()
         ThreadLocalKVLoggerHolder.set(logger)
 
@@ -34,7 +34,7 @@ internal class RabbitMQConsumer(
             val event = mapper.readValue(body, Event::class.java)
             StreamLoggerHelper.log(event, logger)
 
-            // Setup the tracing context
+            // Add TracingContext into the ThreadLocal
             val tc = DefaultTracingContext(
                 clientId = "_rabbitmq_",
                 traceId = event.tracingData.traceId,

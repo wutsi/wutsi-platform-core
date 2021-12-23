@@ -7,15 +7,17 @@ import com.wutsi.platform.core.tracing.ThreadLocalTracingContextHolder
 import java.util.UUID
 
 abstract class AbstractCronJob : CronJob {
-    abstract fun doRun()
+    abstract fun doRun(): Long
 
     abstract fun getJobName(): String
 
     override fun run() {
+        // Add Logger into the ThreadLocal
         val logger = DefaultKVLogger()
         ThreadLocalKVLoggerHolder.set(logger)
         logger.add("job", getJobName())
 
+        // Add TracingContext into the ThreadLocal
         val tc = DefaultTracingContext(
             clientId = getJobName(),
             traceId = UUID.randomUUID().toString(),
@@ -29,11 +31,17 @@ abstract class AbstractCronJob : CronJob {
         logger.add("tenant_id", tc.tenantId())
 
         try {
-            doRun()
+            val result = doRun()
+
+            logger.add("job_result", result)
+            logger.add("success", true)
         } catch (ex: Exception) {
             logger.setException(ex)
             logger.add("success", false)
         } finally {
+            logger.log()
+
+            // Clear the context
             ThreadLocalTracingContextHolder.remove()
             ThreadLocalKVLoggerHolder.remove()
         }
