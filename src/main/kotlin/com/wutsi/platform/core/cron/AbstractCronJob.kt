@@ -35,10 +35,9 @@ abstract class AbstractCronJob : CronJob {
         logger.add("tenant_id", tc.tenantId())
 
         // Add TokenProvider into the ThreadLocale
-        val token = getToken()
-        val tokenProvider = ApplicationTokenProvider()
+        val tokenProvider = ApplicationTokenProvider(getToken())
         ThreadLocalTokenProviderHolder.set(tokenProvider)
-        if (token != null) {
+        if (tokenProvider.getToken() != null) {
             logger.add("authorization", "***")
         }
 
