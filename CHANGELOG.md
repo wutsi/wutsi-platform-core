@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.92] - 2021-12-09
+### Changed
+- Add a flag to enable/disable CORS configuration. CORS is enabled by default
+
 ## [0.0.81] - 2021-11-13
 ### Fixed
 - Subscription configuration

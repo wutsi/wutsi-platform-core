@@ -4,10 +4,11 @@ Support for Spring Security
 
 ## Configuration
 
-| Property                                      | Default Value | Description                                                                                                                                            |
-|-----------------------------------------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| wutsi.platform.security.type                  | none          | Type of cache: `none` or `jwt`                                                                                                                         |
-| wutsi.platform.security.public-endpoints      |               | List of endpoints that do not require neither authentication or authorization. For format of each endpoint looks like `GET /foo/bar` or `POST /foo/**` |
+| Property                                 | Default Value | Description                                                                                                                                            |
+|------------------------------------------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| wutsi.platform.security.type             | none          | Type of cache: `none` or `jwt`                                                                                                                         |
+| wutsi.platform.security.public-endpoints |               | List of endpoints that do not require neither authentication or authorization. For format of each endpoint looks like `GET /foo/bar` or `POST /foo/**` |
+| wutsi.platform.security.cors.enabled     | true          | If `true`, the service will enabled CORS request for all requests                                                                                      |
 
 ## Beans
 
