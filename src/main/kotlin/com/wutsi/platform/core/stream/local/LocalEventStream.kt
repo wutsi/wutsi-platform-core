@@ -104,7 +104,8 @@ class LocalEventStream(
             clientId = tracingContext.clientId(),
             traceId = tracingContext.traceId(),
             deviceId = tracingContext.deviceId(),
-            tenantId = tracingContext.tenantId()
+            tenantId = tracingContext.tenantId(),
+            clientInfo = tracingContext.clientInfo()
         )
     )
 
