@@ -24,6 +24,7 @@ internal class FeignTracingRequestInterceptorTest {
         doReturn("device-id").whenever(tc).deviceId()
         doReturn("trace-id").whenever(tc).traceId()
         doReturn("tenant-id").whenever(tc).tenantId()
+        doReturn("client-info").whenever(tc).clientInfo()
 
         val template = RequestTemplate()
 
@@ -34,5 +35,6 @@ internal class FeignTracingRequestInterceptorTest {
         assertTrue(template.headers()[TracingContext.HEADER_HEROKU_REQUEST_ID]!!.contains("trace-id"))
         assertTrue(template.headers()[TracingContext.HEADER_CLIENT_ID]!!.contains("foo"))
         assertTrue(template.headers()[TracingContext.HEADER_TENANT_ID]!!.contains("tenant-id"))
+        assertTrue(template.headers()[TracingContext.HEADER_CLIENT_INFO]!!.contains("client-info"))
     }
 }

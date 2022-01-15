@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.0.94] - 2022-01-15
+## [0.0.95] - 2022-01-15
 ### Changed
 - Add into the tracing context the `client-info`
 
