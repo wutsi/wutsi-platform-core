@@ -7,5 +7,6 @@ class TestTracingContext(
     clientId: String = "test",
     traceId: String = UUID.randomUUID().toString(),
     deviceId: String = "test-device",
-    tenantId: String = "1"
-) : DefaultTracingContext(clientId, traceId, deviceId, tenantId)
+    tenantId: String = "1",
+    clientInfo: String = "test-device.1.0.233"
+) : DefaultTracingContext(clientId, traceId, deviceId, tenantId, clientInfo)

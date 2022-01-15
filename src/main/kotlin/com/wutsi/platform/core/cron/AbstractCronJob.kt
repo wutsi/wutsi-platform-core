@@ -26,10 +26,12 @@ abstract class AbstractCronJob : CronJob {
             clientId = getJobName(),
             traceId = UUID.randomUUID().toString(),
             deviceId = getJobName(),
-            tenantId = null
+            tenantId = null,
+            clientInfo = null
         )
         ThreadLocalTracingContextHolder.set(tc)
         logger.add("client_id", tc.clientId())
+        logger.add("client_info", tc.clientInfo())
         logger.add("trace_id", tc.traceId())
         logger.add("device_id", tc.deviceId())
         logger.add("tenant_id", tc.tenantId())

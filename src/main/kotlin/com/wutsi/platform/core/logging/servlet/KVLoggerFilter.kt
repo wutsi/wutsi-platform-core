@@ -63,6 +63,7 @@ class KVLoggerFilter(
         kv.add("client_id", tracingContext.clientId(request))
         kv.add("device_id", tracingContext.deviceId(request, deviceIdProvider))
         kv.add("tenant_id", tracingContext.tenantId(request))
+        kv.add("client_info", tracingContext.clientInfo(request))
 
         val params = request.parameterMap
         params.keys.forEach { kv.add("http_param_$it", params[it]?.toList()) }

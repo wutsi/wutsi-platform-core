@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.93] - 2022-01-15
+### Changed
+- Add into the tracing context the `client-info`
+
 ## [0.0.92] - 2021-12-09
 ### Changed
 - Add a flag to enable/disable CORS configuration. CORS is enabled by default

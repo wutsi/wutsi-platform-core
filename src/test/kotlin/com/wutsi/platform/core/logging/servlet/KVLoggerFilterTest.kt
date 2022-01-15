@@ -44,6 +44,7 @@ class KVLoggerFilterTest {
         doReturn("trace-id").whenever(request).getHeader(TracingContext.HEADER_TRACE_ID)
         doReturn("device-id").whenever(deviceIdProvider).get(any())
         doReturn("1").whenever(request).getHeader(TracingContext.HEADER_TENANT_ID)
+        doReturn("client-info").whenever(request).getHeader(TracingContext.HEADER_CLIENT_INFO)
     }
 
     @Test
@@ -78,6 +79,7 @@ class KVLoggerFilterTest {
         verify(kv).add("trace_id", "trace-id")
         verify(kv).add("trace_id", "trace-id")
         verify(kv).add("tenant_id", "1")
+        verify(kv).add("client_info", "client-info")
 
         verify(kv).log()
     }

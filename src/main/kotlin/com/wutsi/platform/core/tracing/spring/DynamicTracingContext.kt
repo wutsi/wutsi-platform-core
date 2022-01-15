@@ -25,6 +25,7 @@ open class DynamicTracingContext(private val context: ApplicationContext) : Trac
     override fun clientId() = get()?.clientId() ?: TracingContext.NONE
     override fun deviceId() = get()?.deviceId() ?: TracingContext.NONE
     override fun tenantId() = get()?.tenantId()
+    override fun clientInfo(): String? = get()?.clientInfo()
 
     private fun get(): TracingContext? =
         if (RequestContextHolder.getRequestAttributes() != null)

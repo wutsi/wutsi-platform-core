@@ -42,7 +42,8 @@ internal class RabbitMQConsumer(
                 clientId = "_rabbitmq_",
                 traceId = event.tracingData.traceId,
                 deviceId = event.tracingData.deviceId,
-                tenantId = event.tracingData.tenantId
+                tenantId = event.tracingData.tenantId,
+                clientInfo = null
             )
             ThreadLocalTracingContextHolder.set(tc)
             StreamLoggerHelper.log(tc, logger)

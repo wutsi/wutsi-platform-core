@@ -14,6 +14,7 @@
     - `X-Device-ID`: Identifier of the device from where the request was initiated.
     - `X-Client-ID`: Identifier of the client that initiates the interaction.
     - `X-Tenant-ID`: Identifier of the current tenant.
+    - `X-Client-Info`: Client Name + Version
 
 ## Spring Configuration
 

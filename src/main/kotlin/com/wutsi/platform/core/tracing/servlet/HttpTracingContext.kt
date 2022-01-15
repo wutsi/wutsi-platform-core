@@ -25,4 +25,7 @@ class HttpTracingContext {
 
     fun tenantId(request: HttpServletRequest): String? =
         request.getHeader(TracingContext.HEADER_TENANT_ID)
+
+    fun clientInfo(request: HttpServletRequest): String? =
+        request.getHeader(TracingContext.HEADER_CLIENT_INFO)
 }

@@ -16,4 +16,5 @@ open class RequestTracingContext(
     override fun clientId() = delegate.clientId(request) ?: TracingContext.NONE
     override fun deviceId() = delegate.deviceId(request, deviceIdProvider) ?: TracingContext.NONE
     override fun tenantId() = delegate.tenantId(request)
+    override fun clientInfo() = delegate.clientInfo(request)
 }

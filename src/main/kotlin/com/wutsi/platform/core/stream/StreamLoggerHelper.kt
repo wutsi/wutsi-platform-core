@@ -19,5 +19,6 @@ object StreamLoggerHelper {
         logger.add("trace_id", tc.traceId())
         logger.add("device_id", tc.deviceId())
         logger.add("tenant_id", tc.tenantId())
+        logger.add("client_info", tc.clientInfo())
     }
 }
