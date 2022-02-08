@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.97] - 2022-02-08
+### Changed
+- Add ErrorDecoder that support Retry
+
 ## [0.0.95] - 2022-01-15
 ### Changed
 - Add into the tracing context the `client-info`
