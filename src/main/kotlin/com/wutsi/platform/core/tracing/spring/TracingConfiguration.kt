@@ -2,7 +2,6 @@ package com.wutsi.platform.core.tracing.spring
 
 import com.wutsi.platform.core.tracing.DeviceIdProvider
 import com.wutsi.platform.core.tracing.TracingContext
-import com.wutsi.platform.core.tracing.feign.FeignAcceptLanguageInterceptor
 import com.wutsi.platform.core.tracing.feign.FeignTracingRequestInterceptor
 import com.wutsi.platform.core.tracing.servlet.DeviceIdFilter
 import com.wutsi.platform.core.tracing.servlet.DeviceIdProviderCookie
@@ -53,8 +52,4 @@ open class TracingConfiguration(
         filter.order = Ordered.LOWEST_PRECEDENCE - 100
         return filter
     }
-
-    @Bean
-    open fun feignAcceptLanguageInterceptor(): FeignAcceptLanguageInterceptor =
-        FeignAcceptLanguageInterceptor(context)
 }
