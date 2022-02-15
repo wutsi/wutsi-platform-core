@@ -70,5 +70,6 @@ class KVLoggerFilter(
 
         request.getHeader("Authorization")?.let { kv.add("authorization", "***") }
         request.getHeader("X-Api-Key")?.let { kv.add("api_key", "***") }
+        request.getHeader("Accept-Language")?.let { kv.add("language", it) }
     }
 }

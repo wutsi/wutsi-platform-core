@@ -45,6 +45,7 @@ class KVLoggerFilterTest {
         doReturn("device-id").whenever(deviceIdProvider).get(any())
         doReturn("1").whenever(request).getHeader(TracingContext.HEADER_TENANT_ID)
         doReturn("client-info").whenever(request).getHeader(TracingContext.HEADER_CLIENT_INFO)
+        doReturn("fr").whenever(request).getHeader("Accept-Language")
     }
 
     @Test
@@ -81,6 +82,7 @@ class KVLoggerFilterTest {
         verify(kv).add("tenant_id", "1")
         verify(kv).add("client_info", "client-info")
 
+        verify(kv).add("language", "fr")
         verify(kv).log()
     }
 
