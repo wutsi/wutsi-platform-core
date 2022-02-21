@@ -30,7 +30,7 @@
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <slf4j.version>1.7.33</slf4j.version>
     <spring.version>5.3.10</spring.version>
-    <spring-security.version>5.6.0</spring-security.version>
+    <spring-security.version>5.6.1</spring-security.version>
     <spring-boot.version>2.5.6</spring-boot.version>
     <xmemcached.version>2.4.7</xmemcached.version>
 
