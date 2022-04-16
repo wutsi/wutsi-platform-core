@@ -21,7 +21,7 @@
 | Property                                              | Default Value | Description                                                                                           |
 |-------------------------------------------------------|---------------|-------------------------------------------------------------------------------------------------------|
 | wutsi.platform.tracing.client-id                      |               | **REQUIRED** - Value of the client ID associated with this application                                |
-| wutsi.platform.tracing.device-id-provider.type        | header        | Type of Device ID provider: `header`                                                                  | `cookie` |
+| wutsi.platform.tracing.device-id-provider.type        | header        | Type of Device ID provider: `header` or `cookie`                                                       | `cookie` |
 | wutsi.platform.tracing.device-id-provider.cookie.name | _w_did        | Name of the cookie that contains the device ID. When `wutsi.platform.tracing.provider-id.type=cookie` |
 
 ## Beans

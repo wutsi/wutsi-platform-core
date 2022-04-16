@@ -12,14 +12,14 @@
     <jacoco.threshold.line>0.81</jacoco.threshold.line>
     <jacoco.threshold.class>0.81</jacoco.threshold.class>
 
-    <amqp-client.version>5.14.1</amqp-client.version>
+    <amqp-client.version>5.14.2</amqp-client.version>
     <aws.version>1.12.66</aws.version>
     <feign.version>11.8</feign.version>
     <jackson.version>2.13.1</jackson.version>
-    <java-jwt.version>3.18.3</java-jwt.version>
+    <java-jwt.version>3.19.1</java-jwt.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
     <junit.version>5.8.2</junit.version>
-    <klint.version>0.43.2</klint.version>
+    <klint.version>0.44.0</klint.version>
     <kotlin.version>1.6.0</kotlin.version>
     <kotlin-ktlint.version>0.38.1</kotlin-ktlint.version>
     <kotlin-mockito.version>2.2.0</kotlin-mockito.version>
@@ -30,8 +30,8 @@
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <slf4j.version>1.7.33</slf4j.version>
     <spring.version>5.3.10</spring.version>
-    <spring-security.version>5.6.0</spring-security.version>
-    <spring-boot.version>2.5.6</spring-boot.version>
+    <spring-security.version>5.6.2</spring-security.version>
+    <spring-boot.version>2.5.12</spring-boot.version>
     <xmemcached.version>2.4.7</xmemcached.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
