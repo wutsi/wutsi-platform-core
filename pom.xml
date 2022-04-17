@@ -15,7 +15,7 @@
     <amqp-client.version>5.14.2</amqp-client.version>
     <aws.version>1.12.66</aws.version>
     <feign.version>11.8</feign.version>
-    <jackson.version>2.13.1</jackson.version>
+    <jackson.version>2.13.2</jackson.version>
     <java-jwt.version>3.19.1</java-jwt.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
     <junit.version>5.8.2</junit.version>
@@ -26,12 +26,12 @@
     <maven-antrun-plugin.version>3.0.0</maven-antrun-plugin.version>
     <maven-exec-plugin.version>3.0.0</maven-exec-plugin.version>
     <maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
-    <maven-jacoco-plugin.version>0.8.7</maven-jacoco-plugin.version>
+    <maven-jacoco-plugin.version>0.8.8</maven-jacoco-plugin.version>
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <slf4j.version>1.7.36</slf4j.version>
     <spring.version>5.3.10</spring.version>
     <spring-security.version>5.6.2</spring-security.version>
-    <spring-boot.version>2.5.12</spring-boot.version>
+    <spring-boot.version>2.6.6</spring-boot.version>
     <xmemcached.version>2.4.7</xmemcached.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
