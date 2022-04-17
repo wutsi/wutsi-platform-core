@@ -11,6 +11,7 @@
 - [Caching](src/docs/Caching.md)
 - [Error Handling](src/docs/Error.md)
 - [Event Streaming](src/docs/Stream.md)
+- [Image Processing](src/docs/Image.md)
 - [Logging](src/docs/Logging.md)
 - [Security](src/docs/Security.md)
 - [Storage](src/docs/Storage.md)
