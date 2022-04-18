@@ -2,6 +2,7 @@ package com.wutsi.platform.core.image.spring
 
 import com.wutsi.platform.core.image.ImageService
 import com.wutsi.platform.core.image.none.ImageServiceNone
+import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -13,7 +14,13 @@ import org.springframework.context.annotation.Configuration
     matchIfMissing = true
 )
 open class ImageConfigurationNone {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(ImageConfigurationNone::class.java)
+    }
+
     @Bean
-    open fun imageService(): ImageService =
-        ImageServiceNone()
+    open fun imageService(): ImageService {
+        LOGGER.info("Creating ImageService")
+        return ImageServiceNone()
+    }
 }
