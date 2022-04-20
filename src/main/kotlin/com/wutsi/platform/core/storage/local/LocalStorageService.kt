@@ -21,15 +21,21 @@ open class LocalStorageService(
     override fun contains(url: URL) = url.toString().startsWith(baseUrl)
 
     @Throws(IOException::class)
-    override fun store(path: String, content: InputStream, contentType: String?, ttlSeconds: Int?, contentEncoding: String?): URL {
+    override fun store(
+        path: String,
+        content: InputStream,
+        contentType: String?,
+        ttlSeconds: Int?,
+        contentEncoding: String?
+    ): URL {
         val f = toFile(path)
         f.parentFile.mkdirs()
 
         FileOutputStream(f)
-            .use({ out ->
-                content.copyTo(out, BUF_SIZE)
-                return toUrl(path)
-            })
+            .use {
+                content.copyTo(it, BUF_SIZE)
+                return toURL(path)
+            }
     }
 
     override fun get(url: URL, os: OutputStream) {
@@ -41,6 +47,8 @@ open class LocalStorageService(
         }
     }
 
+    override fun toURL(path: String) = URL("$baseUrl/$path")
+
     override fun visit(path: String, visitor: StorageVisitor) {
         val file = toFile(path)
         visit(file, visitor)
@@ -48,7 +56,7 @@ open class LocalStorageService(
 
     private fun visit(file: File, visitor: StorageVisitor) {
         if (file.isFile) {
-            visitor.visit(toUrl(file))
+            visitor.visit(toURL(file))
         } else {
             file.listFiles()?.forEach { visit(it, visitor) }
         }
@@ -56,10 +64,8 @@ open class LocalStorageService(
 
     private fun toFile(path: String) = File("$directory/$path")
 
-    private fun toUrl(path: String) = URL("$baseUrl/$path")
-
-    private fun toUrl(file: File): URL {
+    private fun toURL(file: File): URL {
         val path = file.absolutePath.substring(directory.length + 1)
-        return toUrl(path)
+        return toURL(path)
     }
 }
