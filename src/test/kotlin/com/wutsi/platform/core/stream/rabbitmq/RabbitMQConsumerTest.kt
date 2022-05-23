@@ -28,7 +28,7 @@ internal class RabbitMQConsumerTest {
     fun setUp() {
         handler = mock()
         channel = mock()
-        applicationTokenProvider = ApplicationTokenProvider()
+        applicationTokenProvider = mock()
 
         consumer = RabbitMQConsumer(handler, ObjectMapper(), applicationTokenProvider, channel)
     }

@@ -1,5 +1,6 @@
 package com.wutsi.platform.core.stream.local
 
+import com.nhaarman.mockitokotlin2.mock
 import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
@@ -21,7 +22,7 @@ internal class DirectoryWatcherTest {
 
     @BeforeEach
     fun setUp() {
-        applicationTokenProvider = ApplicationTokenProvider()
+        applicationTokenProvider = mock()
 
         directory = File(System.getProperty("user.home") + "/wutsi/directory-watcher")
         directory.deleteRecursively()

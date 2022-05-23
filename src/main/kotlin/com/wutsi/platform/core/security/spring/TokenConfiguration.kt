@@ -23,8 +23,4 @@ open class TokenConfiguration(protected val context: ApplicationContext) {
     @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
     open fun requestTokenProvider(request: HttpServletRequest): RequestTokenProvider =
         RequestTokenProvider(request)
-
-    @Bean
-    open fun applicationTokenProvider(): ApplicationTokenProvider =
-        ApplicationTokenProvider()
 }

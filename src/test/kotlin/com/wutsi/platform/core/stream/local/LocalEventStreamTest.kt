@@ -30,7 +30,7 @@ internal class LocalEventStreamTest {
 
         handler = mock()
         tracingContext = TestTracingContext()
-        applicationTokenProvider = ApplicationTokenProvider()
+        applicationTokenProvider = mock()
         stream = LocalEventStream(
             name = "keystore/test",
             root = root,

@@ -36,7 +36,7 @@ internal class RabbitMQEventStreamTest {
         channel = mock()
         handler = mock()
         tracingContext = TestTracingContext()
-        applicationTokenProvider = ApplicationTokenProvider()
+        applicationTokenProvider = mock()
     }
 
     @Test

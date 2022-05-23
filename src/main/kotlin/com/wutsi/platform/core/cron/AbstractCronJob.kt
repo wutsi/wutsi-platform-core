@@ -6,14 +6,16 @@ import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
 import com.wutsi.platform.core.security.spring.ThreadLocalTokenProviderHolder
 import com.wutsi.platform.core.tracing.DefaultTracingContext
 import com.wutsi.platform.core.tracing.ThreadLocalTracingContextHolder
+import org.springframework.beans.factory.annotation.Autowired
 import java.util.UUID
 
 abstract class AbstractCronJob : CronJob {
+    @Autowired
+    protected lateinit var tokenProvider: ApplicationTokenProvider
+
     abstract fun doRun(): Long
 
     abstract fun getJobName(): String
-
-    abstract fun getToken(): String?
 
     override fun run() {
         // Add Logger into the ThreadLocal
@@ -37,12 +39,7 @@ abstract class AbstractCronJob : CronJob {
         logger.add("tenant_id", tc.tenantId())
 
         // Add TokenProvider into the ThreadLocale
-        val tokenProvider = ApplicationTokenProvider(getToken())
         ThreadLocalTokenProviderHolder.set(tokenProvider)
-        if (tokenProvider.getToken() != null) {
-            logger.add("authorization", "***")
-        }
-
         try {
             val result = doRun()
 
