@@ -6,7 +6,6 @@ import com.wutsi.platform.core.error.spring.ErrorConfiguration
 import com.wutsi.platform.core.image.spring.ImageConfigurationImageKit
 import com.wutsi.platform.core.image.spring.ImageConfigurationNone
 import com.wutsi.platform.core.logging.spring.LoggingConfiguration
-import com.wutsi.platform.core.security.spring.ApiKeyConfiguration
 import com.wutsi.platform.core.security.spring.SecurityConfigurationJWT
 import com.wutsi.platform.core.security.spring.SecurityConfigurationNone
 import com.wutsi.platform.core.security.spring.TokenConfiguration
@@ -21,7 +20,6 @@ import org.springframework.context.annotation.Import
 @Target(AnnotationTarget.CLASS)
 @Import(
     value = [
-        ApiKeyConfiguration::class,
         ErrorConfiguration::class,
         CacheConfigurationLocal::class,
         CacheConfigurationMemcached::class,

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.platform.core.logging.DefaultKVLogger
 import com.wutsi.platform.core.logging.ThreadLocalKVLoggerHolder
 import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
-import com.wutsi.platform.core.security.spring.ThreadLocalTokenProviderHolder
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.stream.StreamLoggerHelper
@@ -76,7 +75,6 @@ class DirectoryWatcher(
                 StreamLoggerHelper.log(tc, logger)
 
                 // Add TokenProvider into the ThreadLocal
-                ThreadLocalTokenProviderHolder.set(applicationTokenProvider)
                 val token = applicationTokenProvider.getToken()
                 if (token != null) {
                     logger.add("authorization", "***")
@@ -92,7 +90,6 @@ class DirectoryWatcher(
                 logger.log()
 
                 ThreadLocalKVLoggerHolder.remove()
-                ThreadLocalTokenProviderHolder.remove()
                 ThreadLocalTracingContextHolder.remove()
             }
         }

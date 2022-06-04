@@ -8,7 +8,6 @@ import com.rabbitmq.client.Envelope
 import com.wutsi.platform.core.logging.DefaultKVLogger
 import com.wutsi.platform.core.logging.ThreadLocalKVLoggerHolder
 import com.wutsi.platform.core.security.spring.ApplicationTokenProvider
-import com.wutsi.platform.core.security.spring.ThreadLocalTokenProviderHolder
 import com.wutsi.platform.core.stream.Event
 import com.wutsi.platform.core.stream.EventHandler
 import com.wutsi.platform.core.stream.StreamLoggerHelper
@@ -49,7 +48,6 @@ internal class RabbitMQConsumer(
             StreamLoggerHelper.log(tc, logger)
 
             // Add TokenProvider into the ThreadLocal
-            ThreadLocalTokenProviderHolder.set(applicationTokenProvider)
             val token = applicationTokenProvider.getToken()
             if (token != null) {
                 logger.add("authorization", "***")

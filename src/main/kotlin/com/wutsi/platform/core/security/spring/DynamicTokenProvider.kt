@@ -7,6 +7,7 @@ import org.springframework.web.context.request.RequestContextHolder
 
 class DynamicTokenProvider(
     private val context: ApplicationContext,
+    private val applicationTokenProvider: ApplicationTokenProvider
 ) : TokenProvider {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(DynamicTokenProvider::class.java)
@@ -26,5 +27,5 @@ class DynamicTokenProvider(
         if (RequestContextHolder.getRequestAttributes() != null)
             context.getBean(RequestTokenProvider::class.java)
         else
-            ThreadLocalTokenProviderHolder.get()
+            applicationTokenProvider
 }
