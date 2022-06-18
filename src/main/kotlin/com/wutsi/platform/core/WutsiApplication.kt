@@ -14,6 +14,8 @@ import com.wutsi.platform.core.storage.spring.StorageConfigurationLocal
 import com.wutsi.platform.core.stream.spring.StreamConfigurationLocal
 import com.wutsi.platform.core.stream.spring.StreamConfigurationRabbitMQ
 import com.wutsi.platform.core.tracing.spring.TracingConfiguration
+import com.wutsi.platform.core.url.spring.UrlShortenerConfigurationBitly
+import com.wutsi.platform.core.url.spring.UrlShortenerConfigurationNone
 import org.springframework.context.annotation.Import
 
 @Retention(AnnotationRetention.RUNTIME)
@@ -34,6 +36,8 @@ import org.springframework.context.annotation.Import
         StorageConfigurationAws::class,
         TracingConfiguration::class,
         TokenConfiguration::class,
+        UrlShortenerConfigurationBitly::class,
+        UrlShortenerConfigurationNone::class
     ]
 )
 annotation class WutsiApplication

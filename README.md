@@ -16,4 +16,5 @@
 - [Security](src/docs/Security.md)
 - [Storage](src/docs/Storage.md)
 - [Tracing](src/docs/Tracing.md)
+- [URL Shortening](src/docs/UrlShortening.md)
 
