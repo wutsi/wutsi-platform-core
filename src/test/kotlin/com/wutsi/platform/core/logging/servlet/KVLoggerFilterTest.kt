@@ -100,7 +100,6 @@ class KVLoggerFilterTest {
             // Then
             fail("")
         } catch (e: IOException) {
-
             // Then
             verify(kv).add("http_endpoint", "/foo/bar")
             verify(kv).add("http_status", 500L)

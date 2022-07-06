@@ -18,7 +18,6 @@ open class DeviceIdFilter(private val deviceIdProvider: DeviceIdProvider) : Filt
 
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         try {
-
             val value = deviceIdProvider.get(request as HttpServletRequest)
             if (value != null)
                 deviceIdProvider.set(value, request, response as HttpServletResponse)

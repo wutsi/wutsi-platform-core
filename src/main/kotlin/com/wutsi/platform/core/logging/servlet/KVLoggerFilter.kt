@@ -26,10 +26,8 @@ class KVLoggerFilter(
 
     @Throws(IOException::class, ServletException::class)
     override fun doFilter(servletRequest: ServletRequest, servletResponse: ServletResponse, filterChain: FilterChain) {
-
         val startTime = System.currentTimeMillis()
         try {
-
             filterChain.doFilter(servletRequest, servletResponse)
             log(startTime, (servletResponse as HttpServletResponse).status, servletRequest as HttpServletRequest, kv)
             kv.log()
