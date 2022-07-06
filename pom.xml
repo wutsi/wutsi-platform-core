@@ -14,7 +14,7 @@
 
     <amqp-client.version>5.15.0</amqp-client.version>
     <aws.version>1.12.66</aws.version>
-    <feign.version>11.8</feign.version>
+    <feign.version>11.9</feign.version>
     <jackson.version>2.13.3</jackson.version>
     <java-jwt.version>4.0.0</java-jwt.version>
     <javax.servlet.version>4.0.1</javax.servlet.version>
